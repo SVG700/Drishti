@@ -1,0 +1,389 @@
+[span] DRISHTI
+[span] दृष्टि
+[p] AI Infra Intelligence
+[div] Core Monitoring
+[span] Overview
+[span] Projects
+[span] 2,100
+[span] God's Eye
+[span] 3D Globe
+[span] AI Assistant
+[span] Analytics
+[span] Reports
+[span] Dataset:
+[span] MoSPI Official
+[span] AI Backend:
+[span] :8000 Ready
+[div] SIH26103 • MoSPI PAIMANA • Team KAALNETRA
+[h1] DRISHTI (दृष्टि)
+[span] AI-Powered Infrastructure Intelligence • MoSPI PAIMANA
+[span] BACKEND:
+[span] ONLINE
+[span] DATASET:
+[span] OFFICIAL
+[span] Dark
+[span] Light
+[h1] DRISHTI • EXECUTIVE OVERVIEW
+[span] MoSPI PAIMANA
+[p] AI-Powered Infrastructure Intelligence • Central Sector Flash Report Analysis
+[span] 3D GOD'S EYE
+[span] AI ASSISTANT
+[span] Total Undertakings
+[div] 2,100
+[div] 3D Mapped Sites
+[span] Delayed Projects
+[div] 1,397
+[div] 66.5
+[div] % of monitored portfolio
+[span] High Risk Projects
+[div] 1,007
+[div] Requires administrative intervention
+[span] Portfolio Cost & Drawdown
+[div] 4,534,196
+[span] Exp: ₹
+[span] 2,305,804
+[span] 50.9
+[h2] TOP SECTORS BY CAPITAL ALLOCATION
+[span] Explore All
+[span] Roads & Highways
+[span] 1135
+[span] projects
+[span] 1,066,131
+[span] Railways
+[span] 303
+[span] projects
+[span] 1,049,918
+[span] Oil & Gas
+[span] 108
+[span] projects
+[span] 408,791
+[span] Electricity Generation
+[span] projects
+[span] 383,150
+[span] Urban Public Transport
+[span] projects
+[span] 355,847
+[h2] PORTFOLIO EXECUTION HEALTH
+[span] Analytics
+[div] Avg Progress
+[div] 104.2
+[div] Physical Completion
+[div] Slippage Rate
+[div] 66.5
+[div] Over Time Horizon
+[div] Drawdown
+[div] 50.9
+[div] Expenditure Ratio
+[span] Delayed:
+[strong] 1397
+[span] In Progress:
+[strong] 685
+[span] Completed:
+[h2] PROJECTS REQUIRING IMMEDIATE ATTENTION
+[p] High-priority undertakings with severe schedule overruns
+[span] All
+[span] 2,100
+[span] Projects
+[th] Project ID
+[th] Project Title & Implementing Agency
+[th] Sector
+[th] Physical Progress
+[th] Delay
+[th] Risk
+[th] Action
+[td] 611939
+[div] Himatnagar Khedbrahma  55 km
+[div] Railway
+[div] Gujarat
+[span] Railways
+[td] 300
+[td] Mos
+[span] CRITICAL
+[span] Inspect
+[td] 619083
+[div] Project #619083
+[div] National Highways Authority of India [NHAI]
+[div] Tamil Nadu
+[span] Roads & Highways
+[span] 100
+[td] 207
+[td] Mos
+[span] CRITICAL
+[span] Inspect
+[td] 619084
+[div] Start of Karur Bypass - Dindigul from km. 292.600 to km. 305.600 Contract Package No. NS2/BOT/TN-4
+[div] National Highways Authority of India [NHAI]
+[div] Tamil Nadu
+[span] Roads & Highways
+[span] 100
+[td] 204
+[td] Mos
+[span] CRITICAL
+[span] Inspect
+[td] 602185
+[div] Tapovan-Vishnugad HEP [4x130 MW]
+[div] National Thermal Power Corporation [NTPC]
+[div] Uttarakhand
+[span] Electricity Generation
+[td] 193
+[td] Mos
+[span] CRITICAL
+[span] Inspect
+[td] 618874
+[div] Four Laning of Trichy - Dindigul from km. 333.00 to km. 421.273 of NH-45
+[div] National Highways Authority of India [NHAI]
+[div] Tamil Nadu
+[span] Roads & Highways
+[span] 100
+[td] 189
+[td] Mos
+[span] CRITICAL
+[span] Inspect
+[td] 602096
+[div] Subansiri Lower HE Project [2000 MW]
+[div] National Hydroelectric Power Corporation Limited [NHPC]
+[div] Multi-States (Arunachal Pradesh, Assam)
+[span] Electricity Generation
+[span] 97.57
+[td] 188
+[td] Mos
+[span] CRITICAL
+[span] Inspect
+[h2] DRISHTI • 3D GOD'S EYE
+[span] 2100
+[span] 2100
+[span] SITES
+[span] FILTERS
+[span] CORRIDORS
+[option] Satellite
+[option] OpenStreetMap
+[option] Google 3D Tiles
+[span] FILTER BY:
+[option] All Sectors (
+[option] 2100
+[option] Aviation & Aviation Infrastructure
+[option] Coal
+[option] Construction
+[option] Education
+[option] Electricity Generation
+[option] Energy Storage
+[option] Healthcare
+[option] Inland Waterways
+[option] Logistics Infrastructure
+[option] Metals & Mining
+[option] Oil & Gas
+[option] Railways
+[option] Real Estate
+[option] Roads & Highways
+[option] Shipping
+[option] Steel
+[option] Telecommunication
+[option] Tourism, Hospitality & Wellness
+[option] Transmission & Distribution
+[option] Urban Public Transport
+[option] Waste & Water
+[option] Water Resources
+[option] All States (
+[option] 109
+[option] 06/2024
+[option] Andaman &
+[option] Andhra Pradesh
+[option] Arunachal Pradesh
+[option] Assam
+[option] Bihar
+[option] Chandigarh
+[option] Chhattisgarh
+[option] Dadra & Nagar
+[option] Delhi
+[option] Goa
+[option] Gujarat
+[option] Haryana
+[option] Himachal Pradesh
+[option] Jammu and
+[option] Jharkhand
+[option] Karnataka
+[option] Kerala
+[option] Ladakh
+[option] Madhya Pradesh
+[option] Maharashtra
+[option] Manipur
+[option] Meghalaya
+[option] Mizoram
+[option] Multi-States (Andhra Pradesh, Bihar, Chhattisgarh, Jharkhand, Madhya Pradesh, Maharashtra, Odisha, Telangana, Uttar Pradesh, West Bengal)
+[option] Multi-States (Andhra Pradesh, Bihar, Delhi, Gujarat, Jharkhand, Karnataka, Kerala, Madhya Pradesh, Odisha, Tamil Nadu, Telangana, Uttar Pradesh, West Bengal)
+[option] Multi-States (Andhra Pradesh, Chhattisgarh, Jharkhand, Maharashtra, Odisha)
+[option] Multi-States (Andhra Pradesh, Chhattisgarh, Odisha)
+[option] Multi-States (Andhra Pradesh, Karnataka)
+[option] Multi-States (Andhra Pradesh, Maharashtra, Telangana)
+[option] Multi-States (Andhra Pradesh, Odisha)
+[option] Multi-States (Andhra Pradesh, Odisha, Telangana)
+[option] Multi-States (Andhra Pradesh, Tamil Nadu)
+[option] Multi-States (Andhra Pradesh, Telangana)
+[option] Multi-States (Arunachal Pradesh, Assam)
+[option] Multi-States (Arunachal Pradesh, Assam, Manipur, Meghalaya, Mizoram, Nagaland, Sikkim, Tripura, West Bengal)
+[option] Multi-States (Arunachal Pradesh, Sikkim)
+[option] Multi-States (Assam, Bihar, Jharkhand, Odisha, West Bengal)
+[option] Multi-States (Assam, Bihar, West Bengal)
+[option] Multi-States (Assam, Manipur, Meghalaya, Mizoram, Nagaland, Tripura)
+[option] Multi-States (Assam, Nagaland)
+[option] Multi-States (Assam, West Bengal)
+[option] Multi-States (Bihar, Delhi, Jharkhand, Uttar Pradesh, West Bengal)
+[option] Multi-States (Bihar, Gujarat, Himachal Pradesh, Jammu and Kashmir, Ladakh, Rajasthan, Uttar Pradesh)
+[option] Multi-States (Bihar, Jharkhand)
+[option] Multi-States (Bihar, Jharkhand, Uttar Pradesh, West Bengal)
+[option] Multi-States (Bihar, Madhya Pradesh, Rajasthan, Uttar Pradesh)
+[option] Multi-States (Bihar, Odisha, West Bengal)
+[option] Multi-States (Bihar, Uttar Pradesh)
+[option] Multi-States (Bihar, West Bengal)
+[option] Multi-States (Chhattisgarh, Madhya Pradesh, Maharashtra, Odisha)
+[option] Multi-States (Chhattisgarh, Maharashtra)
+[option] Multi-States (Chhattisgarh, Odisha)
+[option] Multi-States (Dadra & Nagar Haveli and Daman & Diu, Gujarat, Maharashtra)
+[option] Multi-States (Delhi,
+[option] Multi-States (Goa,
+[option] Multi-States (Gujarat, Haryana, Maharashtra, Rajasthan, Uttar Pradesh)
+[option] Multi-States (Gujarat, Haryana, Punjab, Rajasthan)
+[option] Multi-States (Gujarat, Haryana, Rajasthan)
+[option] Multi-States (Gujarat, Madhya Pradesh)
+[option] Multi-States (Gujarat, Madhya Pradesh, Uttar Pradesh)
+[option] Multi-States (Gujarat, Maharashtra)
+[option] Multi-States (Gujarat, Rajasthan)
+[option] Multi-States (Haryana, Himachal Pradesh)
+[option] Multi-States (Haryana, Punjab)
+[option] Multi-States (Haryana, Punjab, Rajasthan)
+[option] Multi-States (Haryana, Rajasthan)
+[option] Multi-States (Haryana, Uttar Pradesh)
+[option] Multi-States (Himachal Pradesh, Punjab)
+[option] Multi-States (Himachal Pradesh, Uttarakhand)
+[option] Multi-States (Jammu and Kashmir, Ladakh)
+[option] Multi-States (Jammu and Kashmir, Punjab)
+[option] Multi-States (Jharkhand, Odisha)
+[option] Multi-States (Jharkhand, Odisha, West Bengal)
+[option] Multi-States (Jharkhand, Uttar Pradesh)
+[option] Multi-States (Jharkhand, West Bengal)
+[option] Multi-States (Karnataka, Kerala)
+[option] Multi-States (Karnataka, Kerala, Tamil Nadu)
+[option] Multi-States (Karnataka, Maharashtra)
+[option] Multi-States (Karnataka, Maharashtra, Telangana, Uttar Pradesh)
+[option] Multi-States (Karnataka, Tamil Nadu)
+[option] Multi-States (Karnataka, Telangana)
+[option] Multi-States (Kerala, Puducherry)
+[option] Multi-States (Kerala, Tamil Nadu)
+[option] Multi-States (Madhya Pradesh, Maharashtra)
+[option] Multi-States (Madhya Pradesh, Rajasthan)
+[option] Multi-States (Madhya Pradesh, Rajasthan, Uttar Pradesh)
+[option] Multi-States (Madhya Pradesh, Uttar Pradesh)
+[option] Multi-States (Maharashtra, Telangana)
+[option] Multi-States (Odisha, West Bengal)
+[option] Multi-States (Puducherry, Tamil Nadu)
+[option] Multi-States (Punjab, Rajasthan)
+[option] Multi-States (Rajasthan, Uttar Pradesh)
+[option] Multi-States (Sikkim, West Bengal)
+[option] Multi-States (Uttar
+[option] Nagaland
+[option] Odisha
+[option] Offshore
+[option] PAN India
+[option] Puducherry
+[option] Punjab
+[option] Rajasthan
+[option] Sikkim
+[option] Tamil Nadu
+[option] Telangana
+[option] Tripura
+[option] Uttar Pradesh
+[option] Uttarakhand
+[option] West Bengal
+[option] All Statuses
+[option] On Schedule
+[option] Delayed
+[option] Critical
+[option] Completed
+[option] Planning
+[option] In Progress
+[option] All Risk Levels
+[option] Low Risk
+[option] Medium Risk
+[option] High Risk
+[option] Critical Risk
+[option] All Geocoding (
+[option] 2100
+[option] 📍 3D Globe Sites (
+[option] ⚠️ State-Level Pending (
+[option] 2060
+[div] SHOWING
+[strong] 2100
+[strong] 2100
+[div] PROJECTS (
+[div] ON 3D GLOBE)
+[div] Data provided by:
+[a] Data attribution
+[span] INDIAN SUBCONTINENT SECTOR
+[span] 22°18'25.9"N
+[span] 73°10'52.3"E
+[span] 4500 M
+[button] ORBIT 360°
+[button] SECTOR
+[button] NADIR 90°
+[button] OBLIQUE 45°
+[button] ALL INDIA
+[span] PROJECT DETAILS PANEL
+[span] MONITORING ACTIVE
+[span] Aviation & Aviation Infrastructure
+[span] DELAYED
+[span] RISK:
+[span] CRITICAL
+[span] 3D GEOCODED
+[button] REFOCUS
+[h3] Construction of Terminal Building & Associated works at Leh Airport, Ladakh
+[span] CODE:
+[strong] 400010
+[span] OCMS:
+[strong] N04000078
+[span] ID:
+[strong] 400010
+[div] Ministry of Civil Aviation
+[span] PHYSICAL PROGRESS:
+[span] 78.7%
+[span] FINANCIAL PROGRESS:
+[span] 78%
+[div] SANCTIONED BUDGET
+[div] ₹480 Cr
+[div] EXPENDITURE
+[div] ₹501.81 Cr
+[span] REVISED:
+[strong] 640
+[span] 33.3
+[span] % OVERRUN
+[span] STATE:
+[span] Ladakh
+[span] COORDINATES:
+[span] 34.1359
+[span] °N,
+[span] 77.5465
+[span] AGENCY / DEPT:
+[span] Airport Authority of India [AAI]
+[span] START DATE:
+[span] 2018-09
+[span] TARGET COMPLETION:
+[span] 2021-09
+[span] REVISED TARGET:
+[span] 2026-07
+[span] SCHEDULE DELAY:
+[span] MONTHS
+[span] HISTORICAL TRAJECTORY (
+[span] MONTHS)
+[button] PROGRESS %
+[button] EXPENDITURE ₹
+[text] 100%
+[text] 50%
+[span] Baseline:
+[strong] 2025-07
+[span] Latest:
+[strong] 2026-03
+[span] Forecasting & Delay Risk:
+[span] Open Analytics →
+[span] PROJECT SCOPE & OBJECTIVE
+[p] Construction of Terminal Building & Associated works at Leh Airport, Ladakh is an active Central Sector infrastructure undertaking under the Ministry of Civil Aviation (Aviation & Aviation Infrastructure sector in Ladakh). Reported in official MoSPI PAIMANA Flash Reports.
+[span] REFOCUS 3D PROJECT SITE
+[span] ORBIT 360° INSPECTION

@@ -1,0 +1,765 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>DRISHTI (दृष्टि) — AI-Powered Infrastructure Intelligence</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html, body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #07090e;
+        color: #f8fafc;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .font-mono {
+        font-family: monospace;
+      }
+
+      #root {
+        width: 1920px;
+        height: 1080px;
+        position: relative;
+        overflow: hidden;
+        background: #07090e;
+      }
+
+      /* Background tactical grid */
+      .bg-tactical-grid {
+        position: absolute;
+        inset: 0;
+        background-size: 48px 48px;
+        background-image: 
+          linear-gradient(to right, rgba(34, 211, 238, 0.05) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(34, 211, 238, 0.05) 1px, transparent 1px);
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      /* Corner framing brackets */
+      .corner-tl { position: absolute; top: 28px; left: 32px; width: 28px; height: 28px; border-top: 2px solid rgba(34, 211, 238, 0.8); border-left: 2px solid rgba(34, 211, 238, 0.8); z-index: 50; }
+      .corner-tr { position: absolute; top: 28px; right: 32px; width: 28px; height: 28px; border-top: 2px solid rgba(34, 211, 238, 0.8); border-right: 2px solid rgba(34, 211, 238, 0.8); z-index: 50; }
+      .corner-bl { position: absolute; bottom: 28px; left: 32px; width: 28px; height: 28px; border-bottom: 2px solid rgba(34, 211, 238, 0.8); border-left: 2px solid rgba(34, 211, 238, 0.8); z-index: 50; }
+      .corner-br { position: absolute; bottom: 28px; right: 32px; width: 28px; height: 28px; border-bottom: 2px solid rgba(34, 211, 238, 0.8); border-right: 2px solid rgba(34, 211, 238, 0.8); z-index: 50; }
+
+      /* Top HUD Header */
+      .hud-header {
+        position: absolute;
+        top: 24px;
+        left: 70px;
+        right: 70px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 55;
+        font-size: 13px;
+        letter-spacing: 0.12em;
+      }
+      .hud-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(14, 18, 26, 0.92);
+        border: 1px solid rgba(34, 211, 238, 0.35);
+        padding: 6px 16px;
+        border-radius: 6px;
+        color: #38bdf8;
+      }
+      .hud-pulse {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #22d3ee;
+        box-shadow: 0 0 10px #22d3ee;
+      }
+      .hud-telemetry {
+        color: #f1f5f9;
+        display: flex;
+        gap: 24px;
+        background: rgba(14, 18, 26, 0.92);
+        border: 1px solid rgba(51, 65, 85, 0.8);
+        padding: 6px 18px;
+        border-radius: 6px;
+      }
+      .hud-telemetry strong {
+        color: #22d3ee;
+      }
+
+      /* Bottom HUD Status Ribbon */
+      .hud-footer {
+        position: absolute;
+        bottom: 20px;
+        left: 70px;
+        right: 70px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 55;
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        color: #94a3b8;
+      }
+      .hud-footer-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(14, 18, 26, 0.9);
+        border: 1px solid rgba(51, 65, 85, 0.8);
+        padding: 5px 14px;
+        border-radius: 4px;
+      }
+
+      /* Base layout for scenes */
+      .scene {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .scene-content {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Lower-third callout badge */
+      .scene-callout {
+        position: absolute;
+        bottom: 60px;
+        left: 70px;
+        z-index: 50;
+        background: rgba(10, 14, 22, 0.96);
+        border: 1px solid rgba(34, 211, 238, 0.45);
+        border-left: 4px solid #22d3ee;
+        padding: 14px 22px;
+        border-radius: 8px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.85);
+        max-width: 760px;
+      }
+      .scene-callout-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #22d3ee;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 4px;
+      }
+      .scene-callout-desc {
+        font-size: 13px;
+        color: #f1f5f9;
+        line-height: 1.4;
+      }
+
+      /* UI Frame Wrapper */
+      .ui-frame {
+        width: 1780px;
+        height: 940px;
+        margin-top: 20px;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(34, 211, 238, 0.35);
+        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9);
+        position: relative;
+        background: #07090e;
+      }
+      .ui-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transform-origin: center center;
+      }
+
+      /* Typography for Intro & Outro */
+      .intro-headline {
+        font-size: 78px;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        text-align: center;
+        text-transform: uppercase;
+        line-height: 1.1;
+      }
+      .intro-cyan {
+        color: #22d3ee;
+        text-shadow: 0 0 40px rgba(34, 211, 238, 0.45);
+      }
+      .intro-sub {
+        font-size: 26px;
+        color: #e2e8f0;
+        letter-spacing: 0.22em;
+        margin-top: 24px;
+        text-transform: uppercase;
+        text-align: center;
+      }
+      .intro-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 15px;
+        color: #22d3ee;
+        letter-spacing: 0.24em;
+        padding: 8px 24px;
+        border: 1px solid rgba(34, 211, 238, 0.4);
+        border-radius: 9999px;
+        background: rgba(14, 18, 26, 0.85);
+        margin-bottom: 28px;
+      }
+
+      /* Reticle Crosshair in Intro */
+      .reticle-ring {
+        width: 440px;
+        height: 440px;
+        border: 1px dashed rgba(34, 211, 238, 0.22);
+        border-radius: 50%;
+        position: absolute;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="87"
+      data-width="1920"
+      data-height="1080"
+      data-fps="60"
+    >
+      <!-- Background Cyber Grid -->
+      <div class="bg-tactical-grid"></div>
+
+      <!-- Tactical Corner Framing Brackets -->
+      <div class="corner-tl"></div>
+      <div class="corner-tr"></div>
+      <div class="corner-bl"></div>
+      <div class="corner-br"></div>
+
+      <!-- Audio Track Stems (Hyperframes declarative audio engine) -->
+      <!-- Primary Cinematic Background Score -->
+      <audio
+        id="bgm"
+        src="assets/music/happy-beats-business-moves-vol-1-by-ende-dot-app.mp3"
+        data-start="0"
+        data-duration="87"
+        data-volume="0.55"
+        data-track-index="0"
+      ></audio>
+
+      <!-- Impact / UI Interaction Sound Effects -->
+      <audio id="sfx-bell-intro" src="assets/sfx/impact/impactBell_heavy_000.ogg" data-start="1.2" data-duration="1.5" data-volume="0.8" data-track-index="1"></audio>
+      <audio id="sfx-switch-s2" src="assets/sfx/ui/switch1.ogg" data-start="7.0" data-duration="0.2" data-volume="0.7" data-track-index="2"></audio>
+      <audio id="sfx-switch-s3" src="assets/sfx/ui/switch11.ogg" data-start="19.0" data-duration="0.2" data-volume="0.7" data-track-index="3"></audio>
+      <audio id="sfx-click-s3" src="assets/sfx/ui/click1.ogg" data-start="22.5" data-duration="0.10" data-volume="0.75" data-track-index="4"></audio>
+      <audio id="sfx-switch-s4" src="assets/sfx/ui/switch11.ogg" data-start="31.0" data-duration="0.2" data-volume="0.7" data-track-index="5"></audio>
+      <audio id="sfx-zoom-s4" src="assets/sfx/ui/rollover1.ogg" data-start="39.0" data-duration="0.23" data-volume="0.65" data-track-index="6"></audio>
+      <audio id="sfx-switch-s5" src="assets/sfx/ui/switch1.ogg" data-start="47.0" data-duration="0.2" data-volume="0.7" data-track-index="7"></audio>
+      <audio id="sfx-key-1" src="assets/sfx/keyboard/keypress-001.wav" data-start="47.8" data-duration="0.1" data-volume="0.6" data-track-index="8"></audio>
+      <audio id="sfx-key-2" src="assets/sfx/keyboard/keypress-002.wav" data-start="48.1" data-duration="0.1" data-volume="0.6" data-track-index="9"></audio>
+      <audio id="sfx-key-3" src="assets/sfx/keyboard/keypress-003.wav" data-start="48.5" data-duration="0.1" data-volume="0.6" data-track-index="10"></audio>
+      <audio id="sfx-key-4" src="assets/sfx/keyboard/keypress-004.wav" data-start="49.0" data-duration="0.1" data-volume="0.6" data-track-index="11"></audio>
+      <audio id="sfx-key-5" src="assets/sfx/keyboard/keypress-005.wav" data-start="49.5" data-duration="0.1" data-volume="0.6" data-track-index="12"></audio>
+      <audio id="sfx-click-s5" src="assets/sfx/ui/click1.ogg" data-start="50.2" data-duration="0.10" data-volume="0.75" data-track-index="13"></audio>
+      <audio id="sfx-switch-s6" src="assets/sfx/ui/switch11.ogg" data-start="59.0" data-duration="0.2" data-volume="0.7" data-track-index="14"></audio>
+      <audio id="sfx-switch-s7" src="assets/sfx/ui/click1.ogg" data-start="70.0" data-duration="0.10" data-volume="0.7" data-track-index="15"></audio>
+      <audio id="sfx-bell-outro" src="assets/sfx/impact/impactBell_heavy_000.ogg" data-start="80.5" data-duration="1.5" data-volume="0.85" data-track-index="16"></audio>
+
+      <!-- Persistent Tactical HUD Header -->
+      <div class="hud-header font-mono">
+        <div class="hud-tag">
+          <div class="hud-pulse"></div>
+          <span id="hud-system-status">DRISHTI // PAIMANA PLATFORM INITIALIZED</span>
+        </div>
+        <div class="hud-telemetry">
+          <span>PORTFOLIO: <strong>2,100 PROJECTS</strong></span>
+          <span>CAPITAL: <strong>₹45.3 LAKH CR</strong></span>
+          <span>SYSTEM: <strong>SIH26103</strong></span>
+        </div>
+      </div>
+
+      <!-- Tactical HUD Footer -->
+      <div class="hud-footer font-mono">
+        <div class="hud-footer-chip">PLATFORM: <strong style="color: #22d3ee;">MoSPI PAIMANA</strong></div>
+        <div class="hud-footer-chip">SECTOR COVERAGE: <strong style="color: #f8fafc;">CENTRAL SECTOR INFRASTRUCTURE</strong></div>
+        <div class="hud-footer-chip">TEAM: <strong style="color: #38bdf8;">KAALNETRA // SIH 2026</strong></div>
+      </div>
+
+
+      <!-- ================= SCENE 1: OPENING (0.0s - 7.0s) ================= -->
+      <div id="scene-1" class="clip scene" data-start="0" data-duration="7.0">
+        <div class="scene-content" id="s1-content-wrapper">
+          <div class="reticle-ring" id="s1-ring"></div>
+          <div id="s1-content" style="display: flex; flex-direction: column; align-items: center; z-index: 40; text-align: center;">
+            <div class="intro-pill font-mono">
+              <span>●</span> SPATIAL INTELLIGENCE PLATFORM <span>●</span>
+            </div>
+            <h1 class="intro-headline">
+              DRISHTI <span class="intro-cyan">(दृष्टि)</span>
+            </h1>
+            <p class="intro-sub font-mono">
+              AI-POWERED INFRASTRUCTURE INTELLIGENCE
+            </p>
+            <div class="font-mono" style="margin-top: 36px; display: flex; gap: 28px; font-size: 15px; color: #f1f5f9; background: rgba(14, 18, 26, 0.9); padding: 10px 24px; border-radius: 8px; border: 1px solid rgba(51, 65, 85, 0.8);">
+              <div>PROBLEM: <strong style="color: #22d3ee;">MoSPI PAIMANA | SIH26103</strong></div>
+              <div>DEVELOPED BY: <strong style="color: #38bdf8;">TEAM KAALNETRA</strong></div>
+            </div>
+            <div class="font-mono" style="margin-top: 18px; display: flex; gap: 20px; font-size: 12px; color: #94a3b8; letter-spacing: 0.15em;">
+              <span>PORTFOLIO: <strong>2,100 PROJECTS</strong></span>
+              <span>•</span>
+              <span>SECTOR: <strong>CENTRAL SECTOR INFRASTRUCTURE</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ================= SCENE 2: EXECUTIVE OVERVIEW (7.0s - 19.0s) ================= -->
+      <div id="scene-2" class="clip scene" data-start="7.0" data-duration="12.0">
+        <div class="scene-content" id="s2-content-wrapper" style="opacity: 0;">
+          <div class="ui-frame" id="s2-frame">
+            <img id="s2-img" class="ui-image" data-layout-allow-overflow="true" src="assets/ui/scene2_dashboard.png" alt="DRISHTI Executive Dashboard" />
+          </div>
+          <!-- Lower-third badge -->
+          <div class="scene-callout font-mono" id="s2-callout">
+            <div class="scene-callout-title">DATA-DRIVEN INFRASTRUCTURE MONITORING</div>
+            <div class="scene-callout-desc">
+              Macro-level monitoring across 2,100 Central Sector undertakings worth ₹4,534,196 Cr. Systematic identification of 1,397 delayed projects and capital distribution across Roads, Railways, and Energy.
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ================= SCENE 3: PROJECTS EXPLORER & DOSSIER (19.0s - 31.0s) ================= -->
+      <div id="scene-3" class="clip scene" data-start="19.0" data-duration="12.0">
+        <div class="scene-content" id="s3-content-wrapper" style="opacity: 0;">
+          <!-- Base Projects List Frame -->
+          <div class="ui-frame" id="s3-frame">
+            <img id="s3-img-list" class="ui-image" src="assets/ui/scene3_projects_list.png" alt="Projects Explorer" />
+            <!-- Animated Dossier Modal Overlay (Pops in at 22.5s) -->
+            <div id="s3-dossier-wrapper" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.65); opacity: 0;">
+              <img id="s3-img-dossier" src="assets/ui/scene3_project_dossier.png" style="width: 100%; height: 100%; object-fit: contain;" alt="Project Dossier Modal" />
+            </div>
+          </div>
+          <!-- Lower-third badge -->
+          <div class="scene-callout font-mono" id="s3-callout">
+            <div class="scene-callout-title">PROJECTS EXPLORER &amp; COMPREHENSIVE DOSSIER</div>
+            <div class="scene-callout-desc">
+              Audit dossier for Project #400102 (Sri Ram Sagar Stage-II). Highlights sanctioned budget (₹736.13 Cr), revised anticipated cost (₹949.87 Cr), +72 months schedule overrun, and 9-month historical trajectory.
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ================= SCENE 4: GOD'S EYE / 3D GEOSPATIAL INTELLIGENCE (31.0s - 47.0s) ================= -->
+      <div id="scene-4" class="clip scene" data-start="31.0" data-duration="16.0">
+        <div class="scene-content" id="s4-content-wrapper" style="opacity: 0;">
+          <div class="ui-frame" id="s4-frame">
+            <!-- Full Indian Subcontinent 3D Cesium Globe View (31.0s - 39.0s) -->
+            <img id="s4-img-globe" class="ui-image" data-layout-allow-overflow="true" style="position: absolute; inset: 0;" src="assets/ui/scene4_godseye_globe.png" alt="God's Eye 3D Cesium Globe View" />
+            <!-- Tactical Zoom to Pochampad Dam / Sri Ram Sagar Project Site (39.0s - 47.0s) -->
+            <img id="s4-img-zoom" class="ui-image" data-layout-allow-overflow="true" style="position: absolute; inset: 0; opacity: 0;" src="assets/ui/scene4_godseye_zoom.png" alt="God's Eye Project Satellite Zoom View" />
+          </div>
+          <!-- Lower-third badge -->
+          <div class="scene-callout font-mono" id="s4-callout">
+            <div class="scene-callout-title">DRISHTI // GEOSPATIAL INTELLIGENCE ACTIVE</div>
+            <div class="scene-callout-desc">
+              3D geospatial visualization mapping infrastructure projects across India. Features multi-spectral status markers, high-resolution satellite terrain, and site-level telemetry for Project #400102.
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ================= SCENE 5: DRISHTI AI ASSISTANT (47.0s - 59.0s) ================= -->
+      <div id="scene-5" class="clip scene" data-start="47.0" data-duration="12.0">
+        <div class="scene-content" id="s5-content-wrapper" style="opacity: 0;">
+          <div class="ui-frame" id="s5-frame">
+            <img id="s5-img" class="ui-image" data-layout-allow-overflow="true" src="assets/ui/scene5_assistant_chat.png" alt="DRISHTI AI Assistant Inquiry" />
+          </div>
+          <!-- Lower-third badge -->
+          <div class="scene-callout font-mono" id="s5-callout">
+            <div class="scene-callout-title">DRISHTI AI ASSISTANT // GROUNDED INQUIRY</div>
+            <div class="scene-callout-desc">
+              Grounded AI responses using PAIMANA project data and deterministic analytics. Synthesizes physical progress (97.0%), monthly velocity (0.12%), schedule delay (+72.0 mos), and Critical 0.85 risk score.
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ================= SCENE 6: PREDICTIVE ANALYTICS (59.0s - 70.0s) ================= -->
+      <div id="scene-6" class="clip scene" data-start="59.0" data-duration="11.0">
+        <div class="scene-content" id="s6-content-wrapper" style="opacity: 0;">
+          <div class="ui-frame" id="s6-frame-analytics">
+            <img id="s6-img-analytics" class="ui-image" data-layout-allow-overflow="true" src="assets/ui/scene6_analytics_forecast.png" alt="Predictive Analytics" />
+          </div>
+          <!-- Lower-third badge -->
+          <div class="scene-callout font-mono" id="s6-callout">
+            <div class="scene-callout-title">DRISHTI // PROJECT PROGRESS FORECAST</div>
+            <div class="scene-callout-desc">
+              Adaptive Run-Rate Velocity forecasting (+0.13%/mo), 6-month prediction intervals, and composite risk scoring grounded in multi-month PAIMANA reporting data.
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ================= SCENE 7: EXECUTIVE REPORTS (70.0s - 80.0s) ================= -->
+      <div id="scene-7" class="clip scene" data-start="70.0" data-duration="10.0">
+        <div class="scene-content" id="s7-content-wrapper" style="opacity: 0;">
+          <div class="ui-frame" id="s7-frame-reports">
+            <img id="s7-img-reports" class="ui-image" data-layout-allow-overflow="true" src="assets/ui/scene6_reports_brief.png" alt="Executive Reports Brief" />
+          </div>
+          <!-- Lower-third badge -->
+          <div class="scene-callout font-mono" id="s7-callout">
+            <div class="scene-callout-title">DRISHTI // EXECUTIVE PROJECT BRIEF</div>
+            <div class="scene-callout-desc">
+              Executive brief synthesized from PAIMANA project data and analytical indicators. Multi-dimensional summary covering progress velocity, cost variance, schedule slippage, and anomaly indicators.
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ================= SCENE 8: CINEMATIC CLOSING (80.0s - 87.0s) ================= -->
+      <div id="scene-8" class="clip scene" data-start="80.0" data-duration="7.0">
+        <div class="scene-content" id="s8-content-wrapper" style="opacity: 0;">
+          <div class="reticle-ring" id="s8-ring"></div>
+          <div id="s8-content" style="display: flex; flex-direction: column; align-items: center; z-index: 40; text-align: center;">
+            <div class="intro-pill font-mono" style="border-color: rgba(34, 211, 238, 0.6); color: #38bdf8;">
+              SMART INDIA HACKATHON 2026 // GRAND FINALE
+            </div>
+            <h1 class="intro-headline" style="font-size: 84px;">
+              DRISHTI <span class="intro-cyan">(दृष्टि)</span>
+            </h1>
+            <p class="intro-sub font-mono" style="color: #f1f5f9; font-size: 24px; letter-spacing: 0.28em;">
+              AI-POWERED INFRASTRUCTURE INTELLIGENCE
+            </p>
+            <div class="font-mono" style="margin-top: 32px; font-size: 16px; color: #22d3ee; letter-spacing: 0.18em;">
+              MoSPI PAIMANA | PROBLEM STATEMENT SIH26103
+            </div>
+            <div class="font-mono" style="margin-top: 14px; font-size: 14px; color: #94a3b8; letter-spacing: 0.14em;">
+              DEVELOPED BY TEAM KAALNETRA
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- GSAP Master Animation Orchestration -->
+    <script>
+      const tl = gsap.timeline({ paused: true });
+
+      // ============================================================
+      // SCENE 1: OPENING (0.0s - 7.0s)
+      // ============================================================
+      tl.fromTo("#s1-content-wrapper",
+        { opacity: 0, scale: 0.95 },
+        { opacity: 1, scale: 1, duration: 1.4, ease: "power2.out" },
+        0.0
+      );
+      tl.fromTo("#s1-ring",
+        { rotation: 0, scale: 0.8, opacity: 0 },
+        { rotation: 180, scale: 1.1, opacity: 0.6, duration: 6.0, ease: "none" },
+        0.0
+      );
+      tl.to("#s1-content-wrapper", {
+        opacity: 0,
+        scale: 1.05,
+        duration: 0.6,
+        ease: "power2.in"
+      }, 6.4);
+
+      // ============================================================
+      // SCENE 2: EXECUTIVE OVERVIEW (7.0s - 19.0s)
+      // ============================================================
+      tl.fromTo("#s2-content-wrapper",
+        { opacity: 0, scale: 0.96 },
+        { opacity: 1, scale: 1, duration: 0.8, ease: "power2.out" },
+        7.0
+      );
+      tl.fromTo("#s2-callout",
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
+        7.6
+      );
+
+      // Smooth camera punch-in on KPI numbers
+      tl.to("#s2-img", {
+        scale: 1.15,
+        transformOrigin: "45% 25%",
+        duration: 5.0,
+        ease: "power1.inOut"
+      }, 9.0);
+
+      // Smooth pan down to Sector distribution & health
+      tl.to("#s2-img", {
+        scale: 1.2,
+        transformOrigin: "50% 60%",
+        duration: 4.0,
+        ease: "power1.inOut"
+      }, 14.0);
+
+      // Exit Scene 2
+      tl.to("#s2-content-wrapper", {
+        opacity: 0,
+        duration: 0.6,
+        ease: "power2.in"
+      }, 18.4);
+
+      // ============================================================
+      // SCENE 3: PROJECTS EXPLORER & DOSSIER (19.0s - 31.0s)
+      // ============================================================
+      tl.fromTo("#s3-content-wrapper",
+        { opacity: 0 },
+        { opacity: 1, duration: 0.7, ease: "power2.out" },
+        19.0
+      );
+      tl.fromTo("#s3-callout",
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
+        19.5
+      );
+
+      // Open Project Dossier Modal at 22.5s
+      tl.fromTo("#s3-dossier-wrapper",
+        { opacity: 0, scale: 0.92 },
+        { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.2)" },
+        22.5
+      );
+
+      // Subtle zoom on the dossier metrics
+      tl.to("#s3-img-dossier", {
+        scale: 1.05,
+        duration: 7.0,
+        ease: "power1.out"
+      }, 23.5);
+
+      // Exit Scene 3
+      tl.to("#s3-content-wrapper", {
+        opacity: 0,
+        duration: 0.6,
+        ease: "power2.in"
+      }, 30.4);
+
+      // ============================================================
+      // SCENE 4: GOD'S EYE / 3D GEOSPATIAL INTELLIGENCE (31.0s - 47.0s)
+      // ============================================================
+      tl.fromTo("#s4-content-wrapper",
+        { opacity: 0 },
+        { opacity: 1, duration: 0.8, ease: "power2.out" },
+        31.0
+      );
+      tl.fromTo("#s4-callout",
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
+        31.6
+      );
+
+      // Telemetry HUD status update
+      tl.call(() => {
+        const hudStatus = document.getElementById("hud-system-status");
+        if (hudStatus) hudStatus.textContent = "DRISHTI // GEOSPATIAL INTELLIGENCE ACTIVE";
+      }, null, 31.0);
+
+      // Part 1: Slow majestic drift across the 3D Cesium globe of India
+      tl.to("#s4-img-globe", {
+        scale: 1.08,
+        transformOrigin: "42% 48%",
+        duration: 7.5,
+        ease: "power1.inOut"
+      }, 31.5);
+
+      // Part 2: Tactical fly-in transition from macro globe to high-res site satellite terrain (at 39.0s)
+      tl.to("#s4-img-globe", {
+        scale: 1.25,
+        opacity: 0,
+        duration: 1.0,
+        ease: "power2.inOut"
+      }, 39.0);
+
+      tl.fromTo("#s4-img-zoom",
+        { opacity: 0, scale: 1.12 },
+        { opacity: 1, scale: 1.0, duration: 1.2, ease: "power2.out" },
+        39.0
+      );
+
+      // Drift across Pochampad reservoir & project pin
+      tl.to("#s4-img-zoom", {
+        scale: 1.06,
+        transformOrigin: "45% 45%",
+        duration: 6.0,
+        ease: "power1.out"
+      }, 40.5);
+
+      // Exit Scene 4
+      tl.to("#s4-content-wrapper", {
+        opacity: 0,
+        duration: 0.6,
+        ease: "power2.in"
+      }, 46.4);
+
+      // ============================================================
+      // SCENE 5: DRISHTI AI ASSISTANT (47.0s - 59.0s)
+      // ============================================================
+      tl.fromTo("#s5-content-wrapper",
+        { opacity: 0 },
+        { opacity: 1, duration: 0.7, ease: "power2.out" },
+        47.0
+      );
+      tl.fromTo("#s5-callout",
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
+        47.6
+      );
+
+      // Telemetry HUD status update
+      tl.call(() => {
+        const hudStatus = document.getElementById("hud-system-status");
+        if (hudStatus) hudStatus.textContent = "DRISHTI // GROUNDED AI INFERENCE ACTIVE";
+      }, null, 47.0);
+
+      // Gentle camera zoom into conversation
+      tl.to("#s5-img", {
+        scale: 1.18,
+        transformOrigin: "50% 38%",
+        duration: 10.0,
+        ease: "power1.out"
+      }, 48.0);
+
+      // Exit Scene 5
+      tl.to("#s5-content-wrapper", {
+        opacity: 0,
+        duration: 0.6,
+        ease: "power2.in"
+      }, 58.4);
+
+      // ============================================================
+      // SCENE 6: PREDICTIVE ANALYTICS (59.0s - 70.0s)
+      // ============================================================
+      tl.fromTo("#s6-content-wrapper",
+        { opacity: 0 },
+        { opacity: 1, duration: 0.7, ease: "power2.out" },
+        59.0
+      );
+      tl.fromTo("#s6-callout",
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
+        59.6
+      );
+
+      // Telemetry HUD status update
+      tl.call(() => {
+        const hudStatus = document.getElementById("hud-system-status");
+        if (hudStatus) hudStatus.textContent = "DRISHTI // PREDICTIVE ANALYTICS ENGINE";
+      }, null, 59.0);
+
+      // Zoom into forecast & delay risk assessment
+      tl.to("#s6-img-analytics", {
+        scale: 1.15,
+        transformOrigin: "48% 36%",
+        duration: 9.0,
+        ease: "power1.out"
+      }, 60.0);
+
+      // Exit Scene 6
+      tl.to("#s6-content-wrapper", {
+        opacity: 0,
+        duration: 0.6,
+        ease: "power2.in"
+      }, 69.4);
+
+      // ============================================================
+      // SCENE 7: EXECUTIVE REPORTS (70.0s - 80.0s)
+      // ============================================================
+      tl.fromTo("#s7-content-wrapper",
+        { opacity: 0 },
+        { opacity: 1, duration: 0.7, ease: "power2.out" },
+        70.0
+      );
+      tl.fromTo("#s7-callout",
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
+        70.6
+      );
+
+      // Telemetry HUD status update
+      tl.call(() => {
+        const hudStatus = document.getElementById("hud-system-status");
+        if (hudStatus) hudStatus.textContent = "DRISHTI // EXECUTIVE PROJECT BRIEF SYNTHESIS";
+      }, null, 70.0);
+
+      // Zoom into report brief findings
+      tl.to("#s7-img-reports", {
+        scale: 1.14,
+        transformOrigin: "50% 40%",
+        duration: 8.5,
+        ease: "power1.out"
+      }, 70.5);
+
+      // Exit Scene 7
+      tl.to("#s7-content-wrapper", {
+        opacity: 0,
+        duration: 0.6,
+        ease: "power2.in"
+      }, 79.4);
+
+      // ============================================================
+      // SCENE 8: CINEMATIC CLOSING (80.0s - 87.0s)
+      // ============================================================
+      tl.fromTo("#s8-content-wrapper",
+        { opacity: 0 },
+        { opacity: 1, duration: 1.2, ease: "power2.out" },
+        80.0
+      );
+      tl.fromTo("#s8-content",
+        { opacity: 0, scale: 0.9 },
+        { opacity: 1, scale: 1, duration: 1.2, ease: "elastic.out(1, 0.8)" },
+        80.2
+      );
+      tl.fromTo("#s8-ring",
+        { rotation: 0, scale: 0.8, opacity: 0 },
+        { rotation: -120, scale: 1.15, opacity: 0.5, duration: 6.0, ease: "none" },
+        80.0
+      );
+
+      // Telemetry HUD status update
+      tl.call(() => {
+        const hudStatus = document.getElementById("hud-system-status");
+        if (hudStatus) hudStatus.textContent = "DRISHTI // MISSION READY • SIH 2026";
+      }, null, 80.0);
+
+      // Master fade to black before video conclusion
+      tl.to("#root", {
+        opacity: 0,
+        duration: 1.2,
+        ease: "power2.in"
+      }, 85.8);
+
+      // Register timeline for Hyperframes engine
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

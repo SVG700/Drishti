@@ -1,0 +1,178 @@
+{
+  "typography": [
+    {
+      "role": "display",
+      "fontFamily": "-apple-system",
+      "fontSize": "16px",
+      "fontWeight": "700",
+      "lineHeight": "24px",
+      "letterSpacing": "-0.4px",
+      "color": "oklch(0.968 0.007 247.896)",
+      "sampleText": "DRISHTI • EXECUTIVE OVERVIEW"
+    },
+    {
+      "role": "heading",
+      "fontFamily": "ui-monospace",
+      "fontSize": "12px",
+      "fontWeight": "700",
+      "lineHeight": "16px",
+      "letterSpacing": "0.3px",
+      "color": "oklch(0.929 0.013 255.508)",
+      "sampleText": "TOP SECTORS BY CAPITAL ALLOCATION"
+    },
+    {
+      "role": "body",
+      "fontFamily": "ui-monospace",
+      "fontSize": "12px",
+      "fontWeight": "400",
+      "lineHeight": "16px",
+      "letterSpacing": "normal",
+      "color": "oklch(0.704 0.04 256.788)",
+      "sampleText": "AI-Powered Infrastructure Intelligence • Central Sector Flas"
+    },
+    {
+      "role": "code",
+      "fontFamily": "ui-monospace",
+      "fontSize": "12px",
+      "fontWeight": "800",
+      "lineHeight": "16px",
+      "letterSpacing": "0.6px",
+      "color": "oklch(0.968 0.007 247.896)",
+      "sampleText": "DRISHTI"
+    }
+  ],
+  "spacing": {
+    "observed": [
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      16,
+      24,
+      28
+    ],
+    "baseUnit": 4
+  },
+  "radius": [
+    "4px",
+    "8px"
+  ],
+  "shadows": [
+    {
+      "value": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px",
+      "count": 4
+    },
+    {
+      "value": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
+      "count": 1
+    }
+  ],
+  "buttons": [
+    {
+      "label": "button",
+      "background": "transparent",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "oklch(0.704 0.04 256.788)",
+      "padding": "4px",
+      "borderRadius": "4px",
+      "border": "0px solid oklch(0.704 0.04 256.788)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "24px"
+    },
+    {
+      "label": "Overview",
+      "background": "oklab(0.715 -0.116822 -0.0824726 / 0.15)",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "oklch(0.865 0.127 207.078)",
+      "padding": "8px 10px",
+      "borderRadius": "8px",
+      "border": "1px solid oklab(0.715 -0.116822 -0.0824726 / 0.4)",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px",
+      "fontSize": "12px",
+      "fontWeight": "500",
+      "height": "42px"
+    },
+    {
+      "label": "Projects2,100",
+      "background": "transparent",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "oklch(0.704 0.04 256.788)",
+      "padding": "8px 10px",
+      "borderRadius": "8px",
+      "border": "1px solid rgba(0, 0, 0, 0)",
+      "boxShadow": "none",
+      "fontSize": "12px",
+      "fontWeight": "500",
+      "height": "42px"
+    },
+    {
+      "label": "BACKEND:ONLINE",
+      "background": "oklab(0.262 -0.0505697 0.00661093 / 0.4)",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "oklch(0.765 0.177 163.223)",
+      "padding": "4px 8px",
+      "borderRadius": "4px",
+      "border": "1px solid oklab(0.432 -0.0925326 0.0215109 / 0.5)",
+      "boxShadow": "none",
+      "fontSize": "10px",
+      "fontWeight": "500",
+      "height": "25px"
+    },
+    {
+      "label": "DATASET:OFFICIAL",
+      "background": "#10141D",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "oklch(0.869 0.022 252.894)",
+      "padding": "4px 8px",
+      "borderRadius": "4px",
+      "border": "1px solid oklch(0.279 0.041 260.031)",
+      "boxShadow": "none",
+      "fontSize": "10px",
+      "fontWeight": "500",
+      "height": "25px"
+    },
+    {
+      "label": "Dark",
+      "background": "oklab(0.715 -0.116822 -0.0824726 / 0.2)",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "oklch(0.865 0.127 207.078)",
+      "padding": "2px 8px",
+      "borderRadius": "4px",
+      "border": "1px solid oklab(0.715 -0.116822 -0.0824726 / 0.4)",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
+      "fontSize": "10px",
+      "fontWeight": "500",
+      "height": "21px"
+    }
+  ],
+  "cards": [],
+  "nav": {
+    "label": "navigation",
+    "background": "#0A0D14",
+    "backgroundImage": "",
+    "backdropFilter": "",
+    "color": "oklch(0.968 0.007 247.896)",
+    "padding": "0px 16px",
+    "borderRadius": "0px",
+    "border": "",
+    "boxShadow": "none",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "height": "56px"
+  },
+  "chips": [],
+  "statCells": [],
+  "tabs": [],
+  "backgrounds": [],
+  "glass": []
+}
