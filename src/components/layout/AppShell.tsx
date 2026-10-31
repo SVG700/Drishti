@@ -17,8 +17,13 @@ import {
   Sun,
   Moon
 } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 import type { InfrastructureProject } from '../../types/project';
 import { useTheme } from '../../context/ThemeContext';
+import { AnimatedBackdrop } from '../motion/AnimatedBackdrop';
+import { useSpotlight } from '../motion/useSpotlight';
+
+const SPRING = { type: 'spring', stiffness: 420, damping: 34 } as const;
 
 export type NavigationTab =
   | 'overview'
@@ -62,6 +67,7 @@ export const AppShell: React.FC<AppShellProps> = ({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [headerSearchQuery, setHeaderSearchQuery] = useState('');
   const [isSearchDropdownOpen, setIsSearchDropdownOpen] = useState(false);
+  useSpotlight();
 
   // Quick project search in header
   const filteredSearchResults = headerSearchQuery.trim()
@@ -121,13 +127,18 @@ export const AppShell: React.FC<AppShellProps> = ({
         {/* Sidebar Brand Header */}
         <div className="h-14 border-b border-slate-800/90 px-3.5 flex items-center justify-between">
           {!isSidebarCollapsed && (
-            <div className="flex items-center gap-2.5 overflow-hidden">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-600/30 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-bold shrink-0 shadow-sm">
-                <ShieldCheck className="w-4 h-4 text-cyan-400" />
+            <motion.div
+              className="flex items-center gap-2.5 overflow-hidden"
+              initial={{ opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.35 }}
+            >
+              <div className="brand-ring w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-600/30 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-bold shrink-0 shadow-sm">
+                <ShieldCheck className="w-4 h-4 text-cyan-400 float-soft" />
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-extrabold tracking-wider text-xs text-slate-100 font-mono">
+                  <span className="text-gradient-drishti font-extrabold tracking-wider text-xs font-mono">
                     DRISHTI
                   </span>
                   <span className="text-[9px] px-1 py-0.2 bg-cyan-950 text-cyan-300 border border-cyan-800/60 rounded font-mono font-bold">
@@ -138,12 +149,12 @@ export const AppShell: React.FC<AppShellProps> = ({
                   AI Infra Intelligence
                 </p>
               </div>
-            </div>
+            </motion.div>
           )}
 
           {isSidebarCollapsed && (
             <div className="w-full flex justify-center">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-600/30 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-bold shadow-sm">
+              <div className="brand-ring w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-600/30 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-bold shadow-sm">
                 <ShieldCheck className="w-4 h-4 text-cyan-400" />
               </div>
             </div>
@@ -170,32 +181,43 @@ export const AppShell: React.FC<AppShellProps> = ({
             </div>
           )}
 
-          {navItems.map(item => {
+          {navItems.map((item, index) => {
             const Icon = item.icon;
             const isActive = currentTab === item.id;
             return (
-              <button
+              <motion.button
                 key={item.id}
                 onClick={() => onSelectTab(item.id)}
-                className={`w-full flex items-center gap-3 px-2.5 py-2 rounded-lg text-xs font-medium transition-all group cursor-pointer ${
-                  isActive
-                    ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/40 shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-850/80 border border-transparent'
+                initial={{ opacity: 0, x: -14 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.05 + index * 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={{ x: isActive ? 0 : 3 }}
+                className={`relative w-full flex items-center gap-3 px-2.5 py-2 rounded-lg text-xs font-medium group cursor-pointer border border-transparent ${
+                  isActive ? 'text-cyan-300' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-850/80'
                 }`}
                 title={item.label}
               >
+                {isActive && (
+                  <motion.span
+                    layoutId="nav-active"
+                    transition={SPRING}
+                    className="absolute inset-0 rounded-lg bg-gradient-to-r from-cyan-500/20 via-cyan-500/10 to-indigo-500/10 border border-cyan-500/40 shadow-[0_0_18px_-6px_rgba(34,211,238,0.6)]"
+                  >
+                    <span className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-r bg-gradient-to-b from-cyan-300 to-indigo-400" />
+                  </motion.span>
+                )}
                 <div
-                  className={`p-1 rounded transition-colors ${
+                  className={`relative p-1 rounded transition-colors ${
                     isActive
                       ? 'bg-cyan-500/20 text-cyan-300'
                       : 'text-slate-400 group-hover:text-slate-200'
                   }`}
                 >
-                  <Icon className="w-4 h-4 shrink-0" />
+                  <Icon className="w-4 h-4 shrink-0 transition-transform duration-300 group-hover:scale-115 group-hover:-rotate-6" />
                 </div>
 
                 {!isSidebarCollapsed && (
-                  <div className="flex-1 flex items-center justify-between min-w-0">
+                  <div className="relative flex-1 flex items-center justify-between min-w-0">
                     <span
                       className={`truncate text-[12.5px] ${
                         isActive ? 'font-bold text-slate-100' : 'text-slate-300'
@@ -216,7 +238,7 @@ export const AppShell: React.FC<AppShellProps> = ({
                     )}
                   </div>
                 )}
-              </button>
+              </motion.button>
             );
           })}
         </div>
@@ -245,8 +267,8 @@ export const AppShell: React.FC<AppShellProps> = ({
                 }`}
               >
                 <span
-                  className={`w-1.5 h-1.5 rounded-full ${
-                    isBackendOnline ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
+                  className={`status-ping w-1.5 h-1.5 rounded-full ${
+                    isBackendOnline ? 'bg-emerald-400 text-emerald-400' : 'bg-amber-400 text-amber-400'
                   }`}
                 />
                 {isBackendOnline ? ':8000 Ready' : 'Offline'}
@@ -261,9 +283,21 @@ export const AppShell: React.FC<AppShellProps> = ({
       </aside>
 
       {/* MOBILE DRAWER */}
+      <AnimatePresence>
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 flex md:hidden bg-black/70 backdrop-blur-xs">
-          <div className="w-64 bg-[#0C1017] border-r border-slate-800 h-full flex flex-col p-4 space-y-4">
+        <motion.div
+          className="fixed inset-0 z-50 flex md:hidden bg-black/70 backdrop-blur-xs"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <motion.div
+            className="w-64 bg-[#0C1017] border-r border-slate-800 h-full flex flex-col p-4 space-y-4"
+            initial={{ x: -280 }}
+            animate={{ x: 0 }}
+            exit={{ x: -280 }}
+            transition={SPRING}
+          >
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5 text-cyan-400" />
@@ -338,10 +372,11 @@ export const AppShell: React.FC<AppShellProps> = ({
                 </button>
               </div>
             </div>
-          </div>
+          </motion.div>
           <div className="flex-1" onClick={() => setIsMobileMenuOpen(false)} />
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
 
       {/* MAIN CONTAINER */}
       <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
@@ -356,7 +391,7 @@ export const AppShell: React.FC<AppShellProps> = ({
             </button>
 
             <div className="flex items-center gap-2 min-w-0">
-              <h1 className="text-xs sm:text-sm font-bold text-slate-100 tracking-wide uppercase font-sans truncate m-0">
+              <h1 className="text-gradient-drishti text-xs sm:text-sm font-extrabold tracking-wide uppercase font-sans truncate m-0">
                 DRISHTI (दृष्टि)
               </h1>
               <span className="hidden sm:inline text-slate-500 font-mono text-xs">•</span>
@@ -386,11 +421,21 @@ export const AppShell: React.FC<AppShellProps> = ({
                 />
               </div>
 
+              <AnimatePresence>
               {isSearchDropdownOpen && filteredSearchResults.length > 0 && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-[#121722] border border-slate-800 rounded-lg shadow-xl z-50 max-h-64 overflow-y-auto py-1">
-                  {filteredSearchResults.map(proj => (
-                    <div
+                <motion.div
+                  className="absolute top-full left-0 right-0 mt-1 bg-[#121722]/95 backdrop-blur-md border border-slate-800 rounded-lg shadow-xl z-50 max-h-64 overflow-y-auto py-1 origin-top"
+                  initial={{ opacity: 0, y: -6, scaleY: 0.92 }}
+                  animate={{ opacity: 1, y: 0, scaleY: 1 }}
+                  exit={{ opacity: 0, y: -4, scaleY: 0.96 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  {filteredSearchResults.map((proj, i) => (
+                    <motion.div
                       key={proj.id}
+                      initial={{ opacity: 0, x: -6 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.025 }}
                       onClick={() => {
                         onSearchSelectProject?.(proj);
                         setIsSearchDropdownOpen(false);
@@ -403,10 +448,11 @@ export const AppShell: React.FC<AppShellProps> = ({
                         <span className="text-[9.5px] text-slate-400 font-mono">{proj.sector}</span>
                       </div>
                       <div className="text-xs text-slate-200 truncate">{proj.name}</div>
-                    </div>
+                    </motion.div>
                   ))}
-                </div>
+                </motion.div>
               )}
+              </AnimatePresence>
             </div>
 
             {/* AI Backend Status Indicator */}
@@ -424,8 +470,8 @@ export const AppShell: React.FC<AppShellProps> = ({
               }`}
             >
               <span
-                className={`w-1.5 h-1.5 rounded-full ${
-                  isBackendOnline ? 'bg-emerald-400' : 'bg-amber-400'
+                className={`status-ping w-1.5 h-1.5 rounded-full ${
+                  isBackendOnline ? 'bg-emerald-400 text-emerald-400' : 'bg-amber-400 text-amber-400'
                 }`}
               />
               <span className="hidden sm:inline">BACKEND:</span>
@@ -459,14 +505,19 @@ export const AppShell: React.FC<AppShellProps> = ({
                 aria-checked={theme === 'dark'}
                 onClick={() => setTheme('dark')}
                 title="Switch to Dark Theme"
-                className={`p-1 sm:px-2 sm:py-0.5 rounded flex items-center gap-1.5 text-[10px] font-mono font-medium transition cursor-pointer ${
-                  theme === 'dark'
-                    ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40 shadow-xs'
-                    : 'text-slate-400 hover:text-slate-200'
+                className={`relative p-1 sm:px-2 sm:py-0.5 rounded flex items-center gap-1.5 text-[10px] font-mono font-medium transition cursor-pointer border border-transparent ${
+                  theme === 'dark' ? 'text-cyan-300 font-bold' : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
-                <Moon className="w-3.5 h-3.5 text-cyan-400" />
-                <span className="hidden md:inline">Dark</span>
+                {theme === 'dark' && (
+                  <motion.span
+                    layoutId="theme-active"
+                    transition={SPRING}
+                    className="absolute inset-0 rounded bg-cyan-500/20 border border-cyan-500/40"
+                  />
+                )}
+                <Moon className="relative w-3.5 h-3.5 text-cyan-400" />
+                <span className="relative hidden md:inline">Dark</span>
               </button>
               <button
                 type="button"
@@ -474,29 +525,45 @@ export const AppShell: React.FC<AppShellProps> = ({
                 aria-checked={theme === 'light'}
                 onClick={() => setTheme('light')}
                 title="Switch to Light Theme"
-                className={`p-1 sm:px-2 sm:py-0.5 rounded flex items-center gap-1.5 text-[10px] font-mono font-medium transition cursor-pointer ${
-                  theme === 'light'
-                    ? 'bg-amber-500/20 text-amber-500 font-bold border border-amber-500/40 shadow-xs'
-                    : 'text-slate-400 hover:text-slate-200'
+                className={`relative p-1 sm:px-2 sm:py-0.5 rounded flex items-center gap-1.5 text-[10px] font-mono font-medium transition cursor-pointer border border-transparent ${
+                  theme === 'light' ? 'text-amber-500 font-bold' : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
-                <Sun className="w-3.5 h-3.5 text-amber-500" />
-                <span className="hidden md:inline">Light</span>
+                {theme === 'light' && (
+                  <motion.span
+                    layoutId="theme-active"
+                    transition={SPRING}
+                    className="absolute inset-0 rounded bg-amber-500/20 border border-amber-500/40"
+                  />
+                )}
+                <Sun className="relative w-3.5 h-3.5 text-amber-500" />
+                <span className="relative hidden md:inline">Light</span>
               </button>
             </div>
           </div>
         </header>
 
         {/* WORKSPACE CONTENT AREA */}
-        <main
-          className={`flex-1 min-h-0 relative ${
-            currentTab === 'gods-eye'
-              ? 'p-0 overflow-hidden' // Full-bleed for Cesium 3D canvas
-              : 'overflow-y-auto p-3 sm:p-4 lg:p-6'
-          }`}
-        >
-          {children}
-        </main>
+        <div className="relative flex-1 min-h-0 flex flex-col">
+          {/* Route progress sweep, replayed on every tab change */}
+          <motion.div
+            key={currentTab}
+            className="absolute top-0 left-0 right-0 h-[2px] z-30 bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-400 origin-left pointer-events-none"
+            initial={{ scaleX: 0, opacity: 1 }}
+            animate={{ scaleX: 1, opacity: [1, 1, 0] }}
+            transition={{ duration: 0.9, ease: [0.65, 0, 0.35, 1], opacity: { times: [0, 0.7, 1], duration: 0.9 } }}
+          />
+          {currentTab !== 'gods-eye' && <AnimatedBackdrop />}
+          <main
+            className={`flex-1 min-h-0 relative ${
+              currentTab === 'gods-eye'
+                ? 'p-0 overflow-hidden' // Full-bleed for Cesium 3D canvas
+                : 'overflow-y-auto overflow-x-hidden p-3 sm:p-4 lg:p-6'
+            }`}
+          >
+            {children}
+          </main>
+        </div>
       </div>
     </div>
   );

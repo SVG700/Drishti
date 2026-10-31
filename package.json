@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:all": "node scripts/dev-all.mjs",
+    "dev:gods-eye": "node scripts/dev-all.mjs gods-eye",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
@@ -16,6 +18,7 @@
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "tailwind-merge": "^3.7.0",
+    "three": "^0.170.0",
     "vite-plugin-cesium": "^1.2.23"
   },
   "devDependencies": {
@@ -23,6 +26,7 @@
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
+    "@types/three": "^0.170.0",
     "@vitejs/plugin-react": "^6.1.1",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.2",

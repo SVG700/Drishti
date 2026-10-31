@@ -3,8 +3,9 @@
  * SIH26103: Web-Based Integrated Project Monitoring Platform
  * Verified Infrastructure Geocoding Registry
  * ==============================================================================
- * Maps official PAIMANA Project Codes to verified, authoritative geospatial
- * coordinates (Survey of India / AAI / NHAI / MoSPI verified locations).
+ * Maps official PAIMANA Project Codes to the coordinates of each project's
+ * construction site, checked against OpenStreetMap features (terminals,
+ * quarries, stations) and Esri World Imagery; each entry names its source.
  *
  * IMPORTANT:
  * - Real PAIMANA reports do not contain coordinates.
@@ -34,55 +35,55 @@ export const VERIFIED_PROJECT_COORDINATES: Record<string, VerifiedCoordinates> =
   'PRJ-RR-015': { latitude: 28.7041, longitude: 77.4538, altitude: 210, source: 'NCRTC RapidX Ghaziabad' },
 
   // --- Official PAIMANA Central Sector Airport Assets ---
-  '400010': { latitude: 34.1359, longitude: 77.5465, altitude: 3256, source: 'AAI Kushok Bakula Rimpochee Airport Leh' },
-  '611495': { latitude: 26.6812, longitude: 88.3286, altitude: 126, source: 'AAI Bagdogra Airport Civil Enclave' },
-  '611602': { latitude: 12.9941, longitude: 80.1709, altitude: 16, source: 'AAI Chennai International Airport Phase II' },
-  '612063': { latitude: 25.4402, longitude: 81.7342, altitude: 98, source: 'AAI Prayagraj Airport New Terminal' },
-  '612183': { latitude: 25.5913, longitude: 84.8789, altitude: 52, source: 'AAI Bihta Airport Civil Enclave' },
-  '612194': { latitude: 26.1931, longitude: 85.9189, altitude: 48, source: 'AAI Darbhanga Airport Civil Enclave' },
-  '612786': { latitude: 14.5100, longitude: 78.7725, altitude: 133, source: 'AAI Kadapa Airport Terminal' },
-  '612787': { latitude: 15.3617, longitude: 75.0849, altitude: 662, source: 'AAI Hubballi Airport Terminal' },
-  '612788': { latitude: 15.8593, longitude: 74.6183, altitude: 758, source: 'AAI Belagavi Airport Terminal' },
-  '612789': { latitude: 11.1368, longitude: 75.9553, altitude: 104, source: 'AAI Calicut International Airport RESA' },
-  '612791': { latitude: 22.6547, longitude: 88.4467, altitude: 5, source: 'AAI NSCBI Airport Kolkata Runway' },
-  '612793': { latitude: 27.2342, longitude: 88.5861, altitude: 1400, source: 'AAI Pakyong Airport Sikkim Slope' },
-  '616235': { latitude: 18.0069, longitude: 83.4981, altitude: 24, source: 'AAI Bhogapuram International Airport Fuel Farm' },
-  '701101': { latitude: 25.5913, longitude: 85.0880, altitude: 52, source: 'AAI JPNI Airport Patna New Terminal' },
-  '701105': { latitude: 15.3808, longitude: 73.8314, altitude: 56, source: 'AAI Dabolim Airport Goa Terminal Extension' },
-  '701107': { latitude: 16.5304, longitude: 80.7968, altitude: 25, source: 'AAI Vijayawada Airport Integrated Terminal' },
-  '701113': { latitude: 25.4524, longitude: 82.8593, altitude: 81, source: 'AAI Lal Bahadur Shastri Airport Varanasi' },
-  '701121': { latitude: 17.1104, longitude: 81.8182, altitude: 46, source: 'AAI Rajahmundry Airport Domestic Terminal' },
-  '701122': { latitude: 27.1558, longitude: 77.9609, altitude: 168, source: 'AAI Agra Airport Civil Enclave' },
-  '701126': { latitude: 22.2533, longitude: 72.2272, altitude: 18, source: 'AAI Dholera International Greenfield Airport' },
-  '701127': { latitude: 26.2511, longitude: 73.0489, altitude: 219, source: 'AAI Jodhpur Airport Terminal' },
-  '701128': { latitude: 24.6177, longitude: 73.8961, altitude: 513, source: 'AAI Maharana Pratap Airport Udaipur' },
-  '706718': { latitude: 24.7600, longitude: 93.8967, altitude: 774, source: 'AAI Imphal Airport NITB' },
-  '706724': { latitude: 26.1061, longitude: 91.5859, altitude: 49, source: 'Adani Lokpriya Gopinath Bordoloi Guwahati Terminal' },
+  '400010': { latitude: 34.1436, longitude: 77.5548, altitude: 3256, source: 'Leh airport new terminal building (Esri imagery)' },
+  '611495': { latitude: 26.6850, longitude: 88.3255, altitude: 126, source: 'Bagdogra airport terminal area (OSM aeroway=terminal)' },
+  '611602': { latitude: 12.9828, longitude: 80.1643, altitude: 16, source: 'Chennai airport integrated terminal T2 (OSM)' },
+  '612063': { latitude: 25.4441, longitude: 81.7326, altitude: 98, source: 'Prayagraj airport new terminal (OSM aeroway=terminal)' },
+  '612183': { latitude: 25.5835, longitude: 84.8866, altitude: 52, source: 'Bihta civil enclave site south of runway (Esri imagery)' },
+  '612194': { latitude: 26.1903, longitude: 85.9195, altitude: 48, source: 'Darbhanga new civil enclave site south of runway (Esri imagery)' },
+  '612786': { latitude: 14.5184, longitude: 78.7680, altitude: 133, source: 'Kadapa airport terminal (OSM aeroway=terminal)' },
+  '612787': { latitude: 15.3570, longitude: 75.0846, altitude: 662, source: 'Hubballi airport new terminal (OSM aeroway=terminal)' },
+  '612788': { latitude: 15.8630, longitude: 74.6112, altitude: 758, source: 'Belagavi airport terminal (OSM aeroway=terminal)' },
+  '612789': { latitude: 11.1364, longitude: 75.9553, altitude: 104, source: 'Calicut airport runway 10-28 midpoint (OSM aerodrome)' },
+  '612791': { latitude: 22.6531, longitude: 88.4450, altitude: 5, source: 'Kolkata NSCBI secondary runway 01L/19R (Esri imagery)' },
+  '612793': { latitude: 27.2290, longitude: 88.5851, altitude: 1400, source: 'Pakyong airport runway western slope works (Esri imagery)' },
+  '616235': { latitude: 17.9770, longitude: 83.5060, altitude: 24, source: 'Bhogapuram (Alluri Sitarama Raju) airport campus (OSM aerodrome)' },
+  '701101': { latitude: 25.5961, longitude: 85.0910, altitude: 52, source: 'Patna JPNI airport new terminal (OSM aeroway=terminal)' },
+  '701105': { latitude: 15.3850, longitude: 73.8366, altitude: 56, source: 'Goa Dabolim airport terminal (OSM aeroway=terminal)' },
+  '701107': { latitude: 16.5226, longitude: 80.7982, altitude: 25, source: 'Vijayawada airport new integrated terminal (Esri imagery / OSM)' },
+  '701113': { latitude: 25.4487, longitude: 82.8568, altitude: 81, source: 'Varanasi LBS airport terminal (OSM aeroway=terminal)' },
+  '701121': { latitude: 17.1063, longitude: 81.8215, altitude: 46, source: 'Rajahmundry airport terminal (OSM aeroway=terminal)' },
+  '701122': { latitude: 27.1418, longitude: 77.9474, altitude: 168, source: 'Agra new civil enclave site, Dhanauli side (Esri imagery)' },
+  '701126': { latitude: 22.3592, longitude: 72.3062, altitude: 18, source: 'Dholera greenfield airport terminal area (OSM landuse=construction / Esri imagery)' },
+  '701127': { latitude: 26.2637, longitude: 73.0505, altitude: 219, source: 'Jodhpur civil airport terminal (OSM aeroway=terminal)' },
+  '701128': { latitude: 24.6199, longitude: 73.8904, altitude: 513, source: 'Udaipur Maharana Pratap airport terminal (OSM aeroway=terminal)' },
+  '706718': { latitude: 24.7645, longitude: 93.8976, altitude: 774, source: 'Imphal Bir Tikendrajit airport terminal (OSM aeroway=terminal)' },
+  '706724': { latitude: 26.1214, longitude: 91.5990, altitude: 49, source: 'Guwahati LGBI airport new integrated Terminal 2 (OSM aeroway=terminal)' },
 
   // --- Official PAIMANA Central Sector Ports & Waterways ---
-  '400382': { latitude: 18.7833, longitude: 72.8833, altitude: 4, source: 'Rewas Port Terminal (Maharashtra)' },
-  '609424': { latitude: 22.9833, longitude: 70.1000, altitude: 6, source: 'Deendayal Port Tuna-Tekra Container Terminal' },
-  '611943': { latitude: 23.2333, longitude: 68.6833, altitude: 8, source: 'Jakhau Port Rail Link (Gujarat)' },
+  '400382': { latitude: 18.7906, longitude: 72.9306, altitude: 4, source: 'Rewas, Alibag taluka, Raigad (OSM place); port site on this shore' },
+  '609424': { latitude: 22.9310, longitude: 70.1029, altitude: 6, source: 'Tuna-Tekra container terminal, Deendayal Port (OSM)' },
+  '611943': { latitude: 23.2382, longitude: 68.6085, altitude: 8, source: 'Jakhau Port railhead end of Naliya-Jakhau line (OSM)' },
 
   // --- Official PAIMANA Central Sector Power & Multi-Purpose Dams ---
-  '400102': { latitude: 18.9686, longitude: 78.3347, altitude: 330, source: 'Central Water Commission / Pochampad Dam Geodetic Datum' },
-  '400005': { latitude: 22.3000, longitude: 73.2000, altitude: 40, source: 'POWERGRID Gujarat ATC Network Corridor' },
-  '611586': { latitude: 31.2400, longitude: 77.1200, altitude: 650, source: 'SJVN Sunni Dam Hydroelectric Project (HP)' },
-  '613787': { latitude: 29.2789, longitude: 79.6178, altitude: 580, source: 'Jamrani Dam Multipurpose Project (Uttarakhand)' },
+  '400102': { latitude: 17.0324, longitude: 79.6491, altitude: 100, source: 'SRSP Stage-II Kakatiya canal tail (km 346) near Musi, Anantharam, Suryapet (NWDA / OSM)' },
+  '400005': { latitude: 20.9524, longitude: 72.9324, altitude: 10, source: 'Navsari (New) 765/400 kV GIS substation area, approximate (CTUIL; exact site unpublished)' },
+  '611586': { latitude: 31.2481, longitude: 77.2108, altitude: 650, source: 'Sunni Dam axis on Satluj near Khaira (MoEF ToR 31°14\'53"N 77°12\'39"E)' },
+  '613787': { latitude: 29.2497, longitude: 79.6494, altitude: 560, source: 'Jamrani Dam site on Gaula river at Jamrani village (OSM / Esri imagery)' },
 
   // --- Official PAIMANA Central Sector Metro Networks ---
-  '400277': { latitude: 22.5726, longitude: 88.3639, altitude: 10, source: 'Kolkata Metro Dum Dum - New Garia Corridor' },
-  '617207': { latitude: 28.6139, longitude: 77.2090, altitude: 215, source: 'Delhi Metro Rail Phase-IV Priority Corridor' },
-  '617226': { latitude: 18.5204, longitude: 73.8567, altitude: 560, source: 'Pune Metro Swargate - Katraj Alignment' },
-  '617327': { latitude: 19.2183, longitude: 72.9781, altitude: 15, source: 'Thane Integral Ring Metro Alignment' },
-  '619052': { latitude: 26.8467, longitude: 80.9462, altitude: 123, source: 'Lucknow Metro Phase-1B East-West Corridor' },
+  '400277': { latitude: 22.5568, longitude: 88.4123, altitude: 8, source: 'Orange Line under-construction Chingrighata stretch, EM Bypass (OSM)' },
+  '617207': { latitude: 28.5174, longitude: 77.2182, altitude: 230, source: 'Phase-IV Lajpat Nagar-Saket G Block corridor, Saket G Block station (OSM railway=construction)' },
+  '617226': { latitude: 18.4610, longitude: 73.8581, altitude: 600, source: 'Swargate-Katraj line, Padmavati station on Satara Road (OSM railway=proposed)' },
+  '617327': { latitude: 19.2183, longitude: 72.9781, altitude: 15, source: 'Thane Integral Ring Metro alignment near Kapurbawdi' },
+  '619052': { latitude: 26.8670, longitude: 80.9155, altitude: 120, source: 'Phase-1B East-West corridor, Medical College (KGMU) station area (OSM)' },
 
   // --- Official PAIMANA Major Open Cast Coal Mining Sites ---
-  '400147': { latitude: 22.3411, longitude: 82.6853, altitude: 295, source: 'SECL Kusmunda OC Expansion (Chhattisgarh)' },
-  '400424': { latitude: 22.3389, longitude: 82.5936, altitude: 310, source: 'SECL Gevra OC Mega Project (Chhattisgarh)' },
-  '400354': { latitude: 22.3167, longitude: 82.5500, altitude: 300, source: 'SECL Dipka Expansion OCP (Chhattisgarh)' },
-  '400018': { latitude: 25.0167, longitude: 87.4167, altitude: 75, source: 'ECL Hura C OCP (Jharkhand)' },
-  '400033': { latitude: 20.0833, longitude: 79.2833, altitude: 190, source: 'WCL Bhatadi Expansion OC (Maharashtra)' }
+  '400147': { latitude: 22.3315, longitude: 82.6674, altitude: 295, source: 'SECL Kusmunda open cast mine pit (OSM landuse=quarry)' },
+  '400424': { latitude: 22.3338, longitude: 82.5893, altitude: 310, source: 'SECL Gevra open cast mine pit (OSM landuse=quarry)' },
+  '400354': { latitude: 22.3272, longitude: 82.5309, altitude: 300, source: 'SECL Dipka open cast mine pit (OSM landuse=quarry)' },
+  '400018': { latitude: 24.9956, longitude: 87.3734, altitude: 100, source: 'ECL Hurra C open cast pit, Rajmahal area, Godda (GEM / Esri imagery)' },
+  '400033': { latitude: 20.0575, longitude: 79.2736, altitude: 190, source: 'WCL Bhatadi open cast mine pit (OSM landuse=quarry)' }
 };
 
 /**

@@ -15,6 +15,7 @@ import type { InfrastructureProject } from '../../types/project';
 import { SYNTHETIC_PROJECTS } from '../../data/syntheticProjects';
 import { SpatialErrorBoundary } from '../spatial/SpatialErrorBoundary';
 import { Badge } from '../common/Badge';
+import { GodsEyeFrame } from './GodsEyeFrame';
 
 const SpatialIntelligenceView = React.lazy(() => import('../spatial/SpatialIntelligenceView'));
 
@@ -37,7 +38,8 @@ export const GeoAnalysisView: React.FC<GeoAnalysisViewProps> = ({
   onToggleDatasetMode,
   isDatasetLoading = false
 }) => {
-  const [activeGeoMode, setActiveGeoMode] = useState<'3D_GLOBE' | '2D_GRID'>('3D_GLOBE');
+  // GODS_EYE: the new gods-eye-view globe; 3D_GLOBE: the classic Cesium globe.
+  const [activeGeoMode, setActiveGeoMode] = useState<'GODS_EYE' | '3D_GLOBE' | '2D_GRID'>('GODS_EYE');
   const [selectedPointId, setSelectedPointId] = useState<string>(
     initialSelectedId || projects[0]?.id || 'PRJ-NH-042'
   );
@@ -46,7 +48,7 @@ export const GeoAnalysisView: React.FC<GeoAnalysisViewProps> = ({
   useEffect(() => {
     if (initialSelectedId && projects.some(p => p.id === initialSelectedId)) {
       setSelectedPointId(initialSelectedId);
-      setActiveGeoMode('3D_GLOBE');
+      setActiveGeoMode(mode => (mode === '2D_GRID' ? 'GODS_EYE' : mode));
     } else if (projects.length > 0 && !projects.some(p => p.id === selectedPointId)) {
       setSelectedPointId(projects[0].id);
     }
@@ -65,8 +67,21 @@ export const GeoAnalysisView: React.FC<GeoAnalysisViewProps> = ({
     <div className="w-full h-full flex-1 flex flex-col min-h-0 bg-[#07090E] overflow-hidden select-none">
       {/* Main Geospatial Workspace */}
       <div className="flex-1 min-h-0 relative overflow-hidden flex flex-col">
-        {activeGeoMode === '3D_GLOBE' ? (
+        {activeGeoMode === 'GODS_EYE' ? (
+          <GodsEyeFrame
+            projects={projects}
+            selectedProjectId={selectedPointId}
+            onSelectProject={handleSelect}
+            onUseClassicGlobe={() => setActiveGeoMode('3D_GLOBE')}
+          />
+        ) : activeGeoMode === '3D_GLOBE' ? (
           <SpatialErrorBoundary>
+            <button
+              onClick={() => setActiveGeoMode('GODS_EYE')}
+              className="absolute top-2 left-1/2 -translate-x-1/2 z-50 px-2.5 py-1 rounded bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-mono font-bold text-[10px] cursor-pointer"
+            >
+              OPEN NEW GOD'S EYE
+            </button>
             <Suspense fallback={
               <div className="flex flex-col items-center justify-center h-full w-full bg-[#0B0E14] text-slate-400 font-mono text-xs space-y-2">
                 <div className="w-6 h-6 rounded-full border-2 border-cyan-500 border-t-transparent animate-spin" />
@@ -233,7 +248,7 @@ export const GeoAnalysisView: React.FC<GeoAnalysisViewProps> = ({
                   </div>
 
                   <button
-                    onClick={() => setActiveGeoMode('3D_GLOBE')}
+                    onClick={() => setActiveGeoMode('GODS_EYE')}
                     className="w-full py-2 bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs rounded transition-all cursor-pointer flex items-center justify-center gap-1.5"
                   >
                     <Globe className="w-3.5 h-3.5" />

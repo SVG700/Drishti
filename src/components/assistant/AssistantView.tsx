@@ -10,6 +10,7 @@ import {
   ChevronUp,
   ShieldCheck
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import apiService from '../../services/apiService';
 import type { AIAssistantResponse, AssistantClarificationOption } from '../../types/backend';
 import type { InfrastructureProject } from '../../types/project';
@@ -178,7 +179,7 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
           </div>
           <div>
             <h1 className="text-sm font-bold text-slate-100 uppercase tracking-tight">
-              DRISHTI AI Assistant
+              <span className="text-gradient-drishti">DRISHTI</span> AI Assistant
             </h1>
             <p className="text-[11px] text-slate-400 font-mono">
               AI-Powered Infrastructure Intelligence • MoSPI PAIMANA
@@ -250,8 +251,11 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
           const isMetaExpanded = expandedMetaIndex === msg.id;
 
           return (
-            <div
+            <motion.div
               key={msg.id}
+              initial={{ opacity: 0, y: 14, x: isUser ? 18 : -18, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, x: 0, scale: 1 }}
+              transition={{ type: 'spring', stiffness: 380, damping: 30 }}
               className={`flex gap-3 max-w-3xl ${isUser ? 'ml-auto flex-row-reverse' : ''}`}
             >
               {/* Avatar */}
@@ -411,21 +415,30 @@ export const AssistantView: React.FC<AssistantViewProps> = ({
                   {msg.timestamp}
                 </div>
               </div>
-            </div>
+            </motion.div>
           );
         })}
 
         {/* Loading Spinner */}
         {isLoading && (
-          <div className="flex gap-3 max-w-lg">
+          <motion.div className="flex gap-3 max-w-lg" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <div className="w-7 h-7 rounded-lg bg-purple-950 border border-purple-800 text-purple-400 flex items-center justify-center shrink-0">
               <Sparkles className="w-4 h-4 animate-spin text-purple-400" />
             </div>
             <div className="p-3 bg-[#0E1420] border border-slate-800 rounded-xl rounded-tl-none text-xs font-mono text-slate-400 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+              <span className="flex items-end gap-1 h-3" aria-hidden="true">
+                {[0, 1, 2].map(i => (
+                  <motion.span
+                    key={i}
+                    className="w-1.5 h-1.5 rounded-full bg-gradient-to-t from-cyan-400 to-purple-400"
+                    animate={{ y: [0, -5, 0], opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 0.8, repeat: Infinity, delay: i * 0.15, ease: 'easeInOut' }}
+                  />
+                ))}
+              </span>
               <span>Querying MoSPI dataset and executing analytical modules...</span>
             </div>
-          </div>
+          </motion.div>
         )}
 
         <div ref={messagesEndRef} />

@@ -10,6 +10,9 @@ import { AssistantView } from './components/assistant/AssistantView';
 import { AnalyticsView } from './components/analytics/AnalyticsView';
 import { ReportsView } from './components/reports/ReportsView';
 import apiService from './services/apiService';
+import { AnimatePresence, MotionConfig } from 'framer-motion';
+import { PageTransition } from './components/motion/PageTransition';
+import { BootSplash } from './components/motion/BootSplash';
 
 // Helper to parse hash route from window.location
 function parseHashRoute(): { tab: NavigationTab; projectId?: string } {
@@ -137,8 +140,13 @@ export const App: React.FC = () => {
   }, [datasetMode, paimanaResult]);
 
   const selectedProject = useMemo(() => {
-    return activeProjects.find(p => p.id === selectedProjectId) || activeProjects[0] || null;
-  }, [activeProjects, selectedProjectId]);
+    const match = activeProjects.find(p => p.id === selectedProjectId);
+    if (match) return match;
+    // While the official dataset loads, activeProjects is the synthetic placeholder;
+    // substituting one of its projects would send the backend an ID it does not know.
+    if (isLoading && datasetMode === 'PAIMANA') return null;
+    return activeProjects[0] || null;
+  }, [activeProjects, selectedProjectId, isLoading, datasetMode]);
 
   const handleSelectProject = useCallback((project: InfrastructureProject) => {
     setSelectedProjectId(project.id);
@@ -170,6 +178,8 @@ export const App: React.FC = () => {
   }, [activeProjects]);
 
   return (
+    <MotionConfig reducedMotion="user">
+    <BootSplash />
     <AppShell
       currentTab={currentTab}
       onSelectTab={handleSelectTab}
@@ -183,8 +193,10 @@ export const App: React.FC = () => {
       onSearchSelectProject={handleSelectProject}
       allProjects={activeProjects}
     >
+      <AnimatePresence mode="wait">
       {/* 1. OVERVIEW DASHBOARD */}
       {currentTab === 'overview' && (
+        <PageTransition key="overview">
         <OverviewView
           projects={activeProjects}
           onSelectProject={handleSelectProject}
@@ -192,10 +204,12 @@ export const App: React.FC = () => {
           onInspectProject={handleInspectProject}
           isBackendOnline={isBackendOnline}
         />
+        </PageTransition>
       )}
 
       {/* 2. PROJECTS EXPLORER */}
       {currentTab === 'projects' && (
+        <PageTransition key="projects">
         <ProjectsView
           projects={activeProjects}
           selectedProjectId={selectedProjectId}
@@ -204,12 +218,15 @@ export const App: React.FC = () => {
           onInspectProject={handleInspectProject}
           isBackendOnline={isBackendOnline}
         />
+        </PageTransition>
       )}
+
+      </AnimatePresence>
 
       {/* 3. GOD'S EYE 3D GEOSPATIAL INTELLIGENCE */}
       {/* Kept mounted to preserve Cesium WebGL context, active shaders, camera, and tactical radar */}
       <div
-        className={`w-full h-full flex flex-col overflow-hidden bg-[#07090E] ${
+        className={`page-layer w-full h-full flex flex-col overflow-hidden bg-[#07090E] ${
           currentTab === 'gods-eye' ? 'block' : 'hidden'
         }`}
       >
@@ -230,8 +247,10 @@ export const App: React.FC = () => {
         />
       </div>
 
+      <AnimatePresence mode="wait">
       {/* 4. AI ASSISTANT CHATBOT */}
       {currentTab === 'assistant' && (
+        <PageTransition key="assistant">
         <AssistantView
           projects={activeProjects}
           selectedProject={selectedProject}
@@ -240,10 +259,12 @@ export const App: React.FC = () => {
           onNavigateTab={handleSelectTab}
           isBackendOnline={isBackendOnline}
         />
+        </PageTransition>
       )}
 
       {/* 5. ADVANCED ANALYTICS */}
       {currentTab === 'analytics' && (
+        <PageTransition key="analytics">
         <AnalyticsView
           projects={activeProjects}
           selectedProject={selectedProject}
@@ -252,10 +273,12 @@ export const App: React.FC = () => {
           onInspectProject={handleInspectProject}
           isBackendOnline={isBackendOnline}
         />
+        </PageTransition>
       )}
 
       {/* 6. EXECUTIVE INTELLIGENCE REPORTS */}
       {currentTab === 'reports' && (
+        <PageTransition key="reports">
         <ReportsView
           projects={activeProjects}
           selectedProject={selectedProject}
@@ -264,8 +287,11 @@ export const App: React.FC = () => {
           onInspectProject={handleInspectProject}
           isBackendOnline={isBackendOnline}
         />
+        </PageTransition>
       )}
+      </AnimatePresence>
     </AppShell>
+    </MotionConfig>
   );
 };
 

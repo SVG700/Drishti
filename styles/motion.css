@@ -1,0 +1,421 @@
+/* ==============================================================================
+   DRISHTI MOTION SYSTEM
+   Global entrance, hover and ambient animations. Every rule here is switched
+   off under prefers-reduced-motion (bottom of file).
+   ============================================================================== */
+
+:root {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --glow-rgb: 34, 211, 238;
+  --glow-alt-rgb: 168, 85, 247;
+  --spot-alpha: 0.11;
+  --card-hover-shadow: 0 0 0 1px rgba(var(--glow-rgb), 0.28), 0 18px 40px -18px rgba(var(--glow-rgb), 0.35);
+}
+
+html.light {
+  --glow-rgb: 8, 145, 178;
+  --glow-alt-rgb: 147, 51, 234;
+  --spot-alpha: 0.08;
+  --card-hover-shadow: 0 0 0 1px rgba(var(--glow-rgb), 0.25), 0 18px 36px -20px rgba(15, 23, 42, 0.25);
+}
+
+/* ---------- Keyframes ---------- */
+
+@keyframes drishti-rise {
+  from { opacity: 0; transform: translateY(14px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes drishti-row-in {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes drishti-bar-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes drishti-shine {
+  from { transform: translateX(-120%) skewX(-18deg); }
+  to { transform: translateX(220%) skewX(-18deg); }
+}
+
+@keyframes drishti-gradient-pan {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes drishti-ping {
+  0% { transform: scale(1); opacity: 0.75; }
+  80%, 100% { transform: scale(2.6); opacity: 0; }
+}
+
+@keyframes drishti-aurora-a {
+  0%, 100% { transform: translate3d(-8%, -6%, 0) scale(1); }
+  50% { transform: translate3d(10%, 8%, 0) scale(1.18); }
+}
+
+@keyframes drishti-aurora-b {
+  0%, 100% { transform: translate3d(6%, 10%, 0) scale(1.1); }
+  50% { transform: translate3d(-12%, -4%, 0) scale(0.92); }
+}
+
+@keyframes drishti-aurora-c {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(-6%, 6%, 0) rotate(25deg); }
+}
+
+@keyframes drishti-grid-drift {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 0 44px, 44px 0; }
+}
+
+@keyframes drishti-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes drishti-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes drishti-scan {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(100%); }
+}
+
+@keyframes drishti-shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+
+/* ---------- Page entrance: each section of a view rises in, staggered ---------- */
+
+.page-stagger > * > * {
+  animation: drishti-rise 0.7s var(--ease-out-expo) backwards;
+}
+.page-stagger > * > *:nth-child(1) { animation-delay: 0.03s; }
+.page-stagger > * > *:nth-child(2) { animation-delay: 0.09s; }
+.page-stagger > * > *:nth-child(3) { animation-delay: 0.15s; }
+.page-stagger > * > *:nth-child(4) { animation-delay: 0.21s; }
+.page-stagger > * > *:nth-child(5) { animation-delay: 0.27s; }
+.page-stagger > * > *:nth-child(6) { animation-delay: 0.33s; }
+.page-stagger > * > *:nth-child(n + 7) { animation-delay: 0.39s; }
+
+/* Grid children (KPI tiles, panel pairs) cascade inside their section. */
+.page-stagger > * > [class*="grid"] > * {
+  animation: drishti-rise 0.75s var(--ease-out-expo) backwards;
+}
+.page-stagger > * > [class*="grid"] > *:nth-child(1) { animation-delay: 0.12s; }
+.page-stagger > * > [class*="grid"] > *:nth-child(2) { animation-delay: 0.19s; }
+.page-stagger > * > [class*="grid"] > *:nth-child(3) { animation-delay: 0.26s; }
+.page-stagger > * > [class*="grid"] > *:nth-child(4) { animation-delay: 0.33s; }
+.page-stagger > * > [class*="grid"] > *:nth-child(n + 5) { animation-delay: 0.4s; }
+
+/* Overlays (modals) opened inside a view: no stagger delay, own entrance. */
+.page-stagger > * > .fixed {
+  animation: drishti-fade 0.2s ease both;
+}
+.page-stagger > * > .fixed > [class*="rounded-xl"] {
+  animation: drishti-pop 0.45s var(--ease-out-expo) backwards;
+}
+
+@keyframes drishti-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes drishti-pop {
+  from { opacity: 0; transform: translateY(18px) scale(0.95); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------- Table rows slide in ---------- */
+
+main tbody tr {
+  animation: drishti-row-in 0.55s var(--ease-out-expo) backwards;
+}
+main tbody tr:nth-child(1) { animation-delay: 0.18s; }
+main tbody tr:nth-child(2) { animation-delay: 0.22s; }
+main tbody tr:nth-child(3) { animation-delay: 0.26s; }
+main tbody tr:nth-child(4) { animation-delay: 0.3s; }
+main tbody tr:nth-child(5) { animation-delay: 0.34s; }
+main tbody tr:nth-child(6) { animation-delay: 0.38s; }
+main tbody tr:nth-child(7) { animation-delay: 0.42s; }
+main tbody tr:nth-child(8) { animation-delay: 0.46s; }
+main tbody tr:nth-child(9) { animation-delay: 0.5s; }
+main tbody tr:nth-child(10) { animation-delay: 0.54s; }
+main tbody tr:nth-child(n + 11) { animation-delay: 0.58s; }
+
+main tbody tr {
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+main tbody tr:hover {
+  box-shadow: inset 3px 0 0 rgba(var(--glow-rgb), 0.85);
+}
+
+/* ---------- Progress bars fill from the left ---------- */
+
+main .rounded-full > [style*="width"],
+aside .rounded-full > [style*="width"] {
+  transform-origin: left center;
+  animation: drishti-bar-grow 1.2s var(--ease-out-expo) 0.25s backwards;
+}
+
+/* ---------- Cards: cursor spotlight + glowing edge on hover ---------- */
+
+main [class*="rounded-xl"][class*="border-slate-800"],
+.glow-card {
+  position: relative;
+  isolation: isolate;
+  transition: box-shadow 0.35s var(--ease-out-expo), border-color 0.35s var(--ease-out-expo),
+    transform 0.35s var(--ease-out-expo);
+}
+
+main [class*="rounded-xl"][class*="border-slate-800"]::before,
+.glow-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: radial-gradient(
+    520px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(var(--glow-rgb), var(--spot-alpha)),
+    transparent 45%
+  );
+}
+
+main [class*="rounded-xl"][class*="border-slate-800"]:hover,
+.glow-card:hover {
+  box-shadow: var(--card-hover-shadow);
+}
+
+main [class*="rounded-xl"][class*="border-slate-800"]:hover::before,
+.glow-card:hover::before {
+  opacity: 1;
+}
+
+/* ---------- Buttons: press feedback, shine sweep on primary actions ---------- */
+
+main button,
+header button,
+aside button {
+  transition-property: color, background-color, border-color, box-shadow, transform, opacity;
+  transition-duration: 0.2s;
+}
+
+main button:not(:disabled):active,
+header button:not(:disabled):active,
+aside button:not(:disabled):active {
+  transform: scale(0.96);
+}
+
+main button[class*="bg-cyan-600"],
+main button[class*="bg-purple-600"],
+main button[class*="bg-emerald-600"] {
+  position: relative;
+  overflow: hidden;
+}
+
+main button[class*="bg-cyan-600"]::after,
+main button[class*="bg-purple-600"]::after,
+main button[class*="bg-emerald-600"]::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 40%;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: translateX(-120%) skewX(-18deg);
+}
+
+main button[class*="bg-cyan-600"]:hover::after,
+main button[class*="bg-purple-600"]:hover::after,
+main button[class*="bg-emerald-600"]:hover::after {
+  animation: drishti-shine 0.8s ease;
+}
+
+main button[class*="bg-cyan-600"]:hover {
+  box-shadow: 0 0 22px -4px rgba(var(--glow-rgb), 0.7);
+}
+
+/* ---------- Inputs glow on focus ---------- */
+
+main input:focus,
+main select:focus,
+main textarea:focus,
+header input:focus {
+  outline: none;
+}
+
+main [class*="border-slate-800"]:has(> input:focus),
+header [class*="border-slate-800"]:has(> input:focus),
+main input[class*="border"]:focus,
+main select:focus,
+main textarea:focus {
+  border-color: rgba(var(--glow-rgb), 0.7) !important;
+  box-shadow: 0 0 0 3px rgba(var(--glow-rgb), 0.15);
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+/* ---------- Utility classes ---------- */
+
+/* Animated gradient text for brand titles. */
+.text-gradient-drishti {
+  background: linear-gradient(90deg, #22d3ee, #818cf8, #c084fc, #22d3ee);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  animation: drishti-gradient-pan 8s ease infinite;
+}
+html.light .text-gradient-drishti {
+  background-image: linear-gradient(90deg, #0891b2, #4f46e5, #9333ea, #0891b2);
+}
+
+/* Soft expanding ring behind a status dot. */
+.status-ping {
+  position: relative;
+}
+.status-ping::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: drishti-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Rotating conic ring around the brand mark. */
+.brand-ring {
+  position: relative;
+}
+.brand-ring::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(from 0deg, transparent 0 55%, rgba(var(--glow-rgb), 0.95), rgba(var(--glow-alt-rgb), 0.9), transparent 95%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: drishti-spin 3.5s linear infinite;
+}
+
+/* Moving gradient border for highlighted panels. */
+.gradient-border {
+  position: relative;
+}
+.gradient-border::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background: linear-gradient(120deg, rgba(var(--glow-rgb), 0.7), rgba(var(--glow-alt-rgb), 0.55), transparent 60%, rgba(var(--glow-rgb), 0.6));
+  background-size: 300% 300%;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: drishti-gradient-pan 6s ease infinite;
+}
+
+/* Skeleton shimmer for loading placeholders. */
+.shimmer {
+  background: linear-gradient(90deg, rgba(148, 163, 184, 0.06) 25%, rgba(148, 163, 184, 0.18) 37%, rgba(148, 163, 184, 0.06) 63%);
+  background-size: 400% 100%;
+  animation: drishti-shimmer 1.6s ease infinite;
+}
+
+.float-soft {
+  animation: drishti-float 3.2s ease-in-out infinite;
+}
+
+/* ---------- Ambient backdrop (AnimatedBackdrop) ---------- */
+
+.drishti-backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.drishti-backdrop .aurora {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  opacity: 0.55;
+  will-change: transform;
+}
+.drishti-backdrop .aurora-a {
+  width: 46vw; height: 46vw; left: -10vw; top: -18vw;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.32), transparent 65%);
+  animation: drishti-aurora-a 22s ease-in-out infinite;
+}
+.drishti-backdrop .aurora-b {
+  width: 40vw; height: 40vw; right: -12vw; top: 10vh;
+  background: radial-gradient(circle, rgba(129, 140, 248, 0.28), transparent 65%);
+  animation: drishti-aurora-b 26s ease-in-out infinite;
+}
+.drishti-backdrop .aurora-c {
+  width: 38vw; height: 38vw; left: 25vw; bottom: -22vw;
+  background: radial-gradient(circle, rgba(192, 132, 252, 0.22), transparent 65%);
+  animation: drishti-aurora-c 30s ease-in-out infinite;
+}
+
+.drishti-backdrop .grid {
+  position: absolute;
+  inset: -44px 0 0 -44px;
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.055) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 85%);
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, #000 30%, transparent 85%);
+  animation: drishti-grid-drift 6s linear infinite;
+}
+
+.drishti-backdrop canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+html.light .drishti-backdrop .aurora { opacity: 0.35; }
+html.light .drishti-backdrop .grid {
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.05) 1px, transparent 1px);
+}
+
+/* Views sit above the backdrop. */
+main > .page-layer {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Reduced motion: keep the design, drop the movement ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.001ms !important;
+  }
+  .drishti-backdrop canvas { display: none; }
+}

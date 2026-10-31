@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "../styles/gods-eye.css";
+@import "../styles/motion.css";
 
 html, body, #root {
   width: 100%;

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, Suspense, lazy } from 'react';
 import {
   FolderGit2,
   AlertTriangle,
@@ -13,12 +13,29 @@ import {
   Building2,
   ExternalLink,
   Layers,
-  Activity
+  Activity,
+  Box,
+  List,
+  MousePointerClick
 } from 'lucide-react';
 import type { InfrastructureProject } from '../../types/project';
 import { Badge } from '../common/Badge';
 import type { NavigationTab } from '../layout/AppShell';
 import apiService from '../../services/apiService';
+import { AnimatedNumber } from '../motion/AnimatedNumber';
+import { TiltCard } from '../motion/TiltCard';
+import { SectorTowers3D } from '../three/SectorTowers3D';
+import { riskColor } from '../three/riskColor';
+
+const PortfolioGlobe3D = lazy(() => import('../three/PortfolioGlobe3D'));
+
+const GLOBE_LEGEND: { label: string; color: string }[] = [
+  { label: 'Critical', color: '#ef4444' },
+  { label: 'Delayed / High', color: '#f97316' },
+  { label: 'Medium', color: '#f59e0b' },
+  { label: 'On track', color: '#10b981' },
+  { label: 'Completed', color: '#06b6d4' }
+];
 import type { AnalyticsSummaryResponse } from '../../types/backend';
 
 interface OverviewViewProps {
@@ -37,6 +54,17 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
   isBackendOnline
 }) => {
   const [analyticsSummary, setAnalyticsSummary] = useState<AnalyticsSummaryResponse | null>(null);
+  const [sectorView, setSectorView] = useState<'3d' | 'list'>('3d');
+  const [focusedProject, setFocusedProject] = useState<InfrastructureProject | null>(null);
+
+  const mappedProjects = useMemo(() => projects.filter(p => p.hasCoordinates), [projects]);
+  const mappedStats = useMemo(() => {
+    const atRisk = mappedProjects.filter(p => p.riskLevel === 'CRITICAL' || p.riskLevel === 'HIGH').length;
+    const avg = mappedProjects.length
+      ? mappedProjects.reduce((sum, p) => sum + Math.min(100, p.physicalProgress || 0), 0) / mappedProjects.length
+      : 0;
+    return { atRisk, avg };
+  }, [mappedProjects]);
 
   // Load backend summary if online
   useEffect(() => {
@@ -151,11 +179,11 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
   return (
     <div className="space-y-4 max-w-7xl mx-auto pb-8 font-sans">
       {/* 1. EXECUTIVE HEADER */}
-      <div className="bg-[#0C1017] p-3.5 sm:p-4 rounded-xl border border-slate-800/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div className="gradient-border bg-[#0C1017] p-3.5 sm:p-4 rounded-xl border border-slate-800/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-sm sm:text-base font-bold text-slate-100 uppercase tracking-tight">
-              DRISHTI • EXECUTIVE OVERVIEW
+            <h1 className="text-sm sm:text-base font-extrabold uppercase tracking-tight">
+              <span className="text-gradient-drishti">DRISHTI</span> <span className="text-slate-100">• EXECUTIVE OVERVIEW</span>
             </h1>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 font-bold">
               MoSPI PAIMANA
@@ -184,88 +212,184 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
         </div>
       </div>
 
+      {/* 1b. LIVE 3D PORTFOLIO GLOBE */}
+      <div className="bg-[#0C1017] rounded-xl border border-slate-800/80 overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+          <div className="relative z-10 p-5 sm:p-6 flex flex-col justify-center gap-4">
+            <span className="self-start flex items-center gap-2 px-2 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-[10px] font-mono font-bold text-cyan-300 uppercase tracking-wider">
+              <span className="status-ping w-1.5 h-1.5 rounded-full bg-cyan-400 text-cyan-400" />
+              Live 3D Portfolio Globe
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold leading-tight tracking-tight">
+              <span className="text-slate-100">India&apos;s infrastructure,</span>
+              <br />
+              <span className="text-gradient-drishti">seen from orbit.</span>
+            </h2>
+            <p className="text-xs sm:text-[13px] text-slate-400 leading-relaxed max-w-md">
+              Every light beam is a geocoded PAIMANA construction site: its colour is the risk level and its
+              height the physical progress. Data arcs trace each site back to the New Delhi command hub.
+            </p>
+
+            <div className="grid grid-cols-3 gap-2 max-w-md">
+              <div className="p-2.5 rounded-lg bg-[#10141D] border border-slate-800">
+                <div className="text-xl font-extrabold font-mono text-cyan-400"><AnimatedNumber value={mappedProjects.length} /></div>
+                <div className="text-[9.5px] font-mono uppercase text-slate-400">Sites in 3D</div>
+              </div>
+              <div className="p-2.5 rounded-lg bg-[#10141D] border border-slate-800">
+                <div className="text-xl font-extrabold font-mono text-rose-400"><AnimatedNumber value={mappedStats.atRisk} /></div>
+                <div className="text-[9.5px] font-mono uppercase text-slate-400">High risk</div>
+              </div>
+              <div className="p-2.5 rounded-lg bg-[#10141D] border border-slate-800">
+                <div className="text-xl font-extrabold font-mono text-emerald-400"><AnimatedNumber value={mappedStats.avg} decimals={1} suffix="%" /></div>
+                <div className="text-[9.5px] font-mono uppercase text-slate-400">Avg progress</div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-x-3 gap-y-1 text-[10px] font-mono text-slate-400">
+              {GLOBE_LEGEND.map(item => (
+                <span key={item.label} className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full" style={{ background: item.color, boxShadow: `0 0 8px ${item.color}` }} />
+                  {item.label}
+                </span>
+              ))}
+            </div>
+
+            {focusedProject ? (
+              <div className="max-w-md p-3 rounded-lg bg-[#10141D] border border-cyan-500/40 shadow-[0_0_24px_-10px_rgba(34,211,238,0.7)] space-y-2">
+                <div className="flex items-start gap-2">
+                  <span className="mt-1 w-2 h-2 rounded-full shrink-0" style={{ background: riskColor(focusedProject) }} />
+                  <div className="min-w-0">
+                    <div className="text-xs font-bold text-slate-100 line-clamp-2">{focusedProject.name}</div>
+                    <div className="text-[10px] font-mono text-slate-400 truncate">
+                      {focusedProject.state} • {focusedProject.sector} • {focusedProject.physicalProgress}% complete
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => handleInspect(focusedProject)}
+                  className="w-full py-1.5 rounded-md bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-[11px] font-mono flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <Globe className="w-3.5 h-3.5" /> FLY THERE IN GOD&apos;S EYE
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 text-[11px] font-mono text-slate-500">
+                <MousePointerClick className="w-3.5 h-3.5 text-cyan-400 float-soft" />
+                Drag the globe to spin it. Click any beam to focus a project.
+              </div>
+            )}
+          </div>
+
+          <div className="relative h-[340px] sm:h-[420px] bg-[radial-gradient(ellipse_at_center,rgba(34,211,238,0.08),transparent_65%)]">
+            <Suspense
+              fallback={
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-24 h-24 rounded-full border border-cyan-500/30 border-t-cyan-400 animate-spin" />
+                </div>
+              }
+            >
+              <PortfolioGlobe3D
+                projects={mappedProjects}
+                selectedProjectId={focusedProject?.id ?? null}
+                onSelectProject={p => {
+                  setFocusedProject(p);
+                  onSelectProject(p);
+                }}
+              />
+            </Suspense>
+            <div className="absolute bottom-2 right-3 text-[9px] font-mono uppercase tracking-wider text-slate-500 pointer-events-none">
+              Drag to rotate • Click a beam
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* 2. CORE EXECUTIVE KPIS */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* Metric 1: Total Undertakings */}
-        <div className="bg-[#0C1017] p-3.5 sm:p-4 rounded-xl border border-slate-800/80 space-y-2">
+        <TiltCard className="group bg-[#0C1017] p-3.5 sm:p-4 rounded-xl border border-slate-800/80 space-y-2 overflow-hidden">
+          <span className="pointer-events-none absolute bottom-0 left-0 h-[2px] w-full origin-left scale-x-0 bg-gradient-to-r from-cyan-400 to-indigo-400 transition-transform duration-500 group-hover:scale-x-100" />
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider font-semibold">
               Total Undertakings
             </span>
-            <div className="w-6 h-6 rounded bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+            <div className="w-6 h-6 rounded transition-transform duration-300 group-hover:scale-125 group-hover:rotate-6 bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
               <FolderGit2 className="w-3.5 h-3.5" />
             </div>
           </div>
           <div>
             <div className="text-2xl sm:text-3xl font-extrabold text-slate-100 font-mono">
-              {metrics.total.toLocaleString()}
+              <AnimatedNumber value={metrics.total} />
             </div>
             <div className="text-[11px] text-cyan-400 font-mono mt-0.5">
               {projects.filter(p => p.hasCoordinates).length.toLocaleString()} 3D Mapped Sites
             </div>
           </div>
-        </div>
+        </TiltCard>
 
         {/* Metric 2: Delayed Projects */}
-        <div className="bg-[#0C1017] p-3.5 sm:p-4 rounded-xl border border-slate-800/80 space-y-2">
+        <TiltCard className="group bg-[#0C1017] p-3.5 sm:p-4 rounded-xl border border-slate-800/80 space-y-2 overflow-hidden">
+          <span className="pointer-events-none absolute bottom-0 left-0 h-[2px] w-full origin-left scale-x-0 bg-gradient-to-r from-amber-400 to-orange-500 transition-transform duration-500 group-hover:scale-x-100" />
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider font-semibold">
               Delayed Projects
             </span>
-            <div className="w-6 h-6 rounded bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+            <div className="w-6 h-6 rounded transition-transform duration-300 group-hover:scale-125 group-hover:rotate-6 bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
               <Clock className="w-3.5 h-3.5" />
             </div>
           </div>
           <div>
             <div className="text-2xl sm:text-3xl font-extrabold text-amber-400 font-mono">
-              {metrics.delayedCount.toLocaleString()}
+              <AnimatedNumber value={metrics.delayedCount} />
             </div>
             <div className="text-[11px] text-amber-300 font-mono mt-0.5">
               {metrics.delayedPct}% of monitored portfolio
             </div>
           </div>
-        </div>
+        </TiltCard>
 
         {/* Metric 3: Critical & High Risk */}
-        <div className="bg-[#0C1017] p-3.5 sm:p-4 rounded-xl border border-slate-800/80 space-y-2">
+        <TiltCard className="group bg-[#0C1017] p-3.5 sm:p-4 rounded-xl border border-slate-800/80 space-y-2 overflow-hidden">
+          <span className="pointer-events-none absolute bottom-0 left-0 h-[2px] w-full origin-left scale-x-0 bg-gradient-to-r from-rose-400 to-fuchsia-500 transition-transform duration-500 group-hover:scale-x-100" />
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider font-semibold">
               High Risk Projects
             </span>
-            <div className="w-6 h-6 rounded bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
+            <div className="w-6 h-6 rounded transition-transform duration-300 group-hover:scale-125 group-hover:rotate-6 bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
               <AlertTriangle className="w-3.5 h-3.5" />
             </div>
           </div>
           <div>
             <div className="text-2xl sm:text-3xl font-extrabold text-rose-400 font-mono">
-              {metrics.criticalRiskCount.toLocaleString()}
+              <AnimatedNumber value={metrics.criticalRiskCount} />
             </div>
             <div className="text-[11px] text-rose-300 font-mono mt-0.5">
               Requires administrative intervention
             </div>
           </div>
-        </div>
+        </TiltCard>
 
         {/* Metric 4: Total Capital Commitment */}
-        <div className="bg-[#0C1017] p-3.5 sm:p-4 rounded-xl border border-slate-800/80 space-y-2">
+        <TiltCard className="group bg-[#0C1017] p-3.5 sm:p-4 rounded-xl border border-slate-800/80 space-y-2 overflow-hidden">
+          <span className="pointer-events-none absolute bottom-0 left-0 h-[2px] w-full origin-left scale-x-0 bg-gradient-to-r from-emerald-400 to-cyan-400 transition-transform duration-500 group-hover:scale-x-100" />
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider font-semibold">
               Portfolio Cost & Drawdown
             </span>
-            <div className="w-6 h-6 rounded bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+            <div className="w-6 h-6 rounded transition-transform duration-300 group-hover:scale-125 group-hover:rotate-6 bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
               <DollarSign className="w-3.5 h-3.5" />
             </div>
           </div>
           <div>
             <div className="text-xl sm:text-2xl font-extrabold text-slate-100 font-mono">
-              ₹{metrics.totalRevisedCost.toLocaleString()} Cr
+              <AnimatedNumber value={metrics.totalRevisedCost} prefix="₹" suffix=" Cr" />
             </div>
             <div className="mt-0.5 flex items-center justify-between text-[11px] font-mono text-slate-400">
               <span>Exp: ₹{metrics.totalExpenditure.toLocaleString()} Cr</span>
               <span className="text-emerald-400 font-bold">{metrics.drawdownPct}%</span>
             </div>
           </div>
-        </div>
+        </TiltCard>
       </div>
 
       {/* 3. TWO STRATEGIC INSIGHT PANELS */}
@@ -279,23 +403,43 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                 TOP SECTORS BY CAPITAL ALLOCATION
               </h2>
             </div>
-            <button
-              onClick={() => onNavigateTab('projects')}
-              className="text-[11px] text-cyan-400 hover:text-cyan-300 font-mono flex items-center gap-1 cursor-pointer"
-            >
-              <span>Explore All</span>
-              <ChevronRight className="w-3 h-3" />
-            </button>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center bg-[#10141D] border border-slate-800 rounded-md p-0.5">
+                {(['3d', 'list'] as const).map(mode => (
+                  <button
+                    key={mode}
+                    onClick={() => setSectorView(mode)}
+                    className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold flex items-center gap-1 cursor-pointer ${
+                      sectorView === mode ? 'bg-cyan-500/20 text-cyan-300' : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                    title={mode === '3d' ? '3D towers' : 'List'}
+                  >
+                    {mode === '3d' ? <Box className="w-3 h-3" /> : <List className="w-3 h-3" />}
+                    {mode === '3d' ? '3D' : 'LIST'}
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={() => onNavigateTab('projects')}
+                className="text-[11px] text-cyan-400 hover:text-cyan-300 font-mono flex items-center gap-1 cursor-pointer"
+              >
+                <span>Explore All</span>
+                <ChevronRight className="w-3 h-3" />
+              </button>
+            </div>
           </div>
 
+          {sectorView === '3d' ? (
+            <SectorTowers3D sectors={metrics.topSectors} />
+          ) : (
           <div className="space-y-2.5 pt-0.5">
             {metrics.topSectors.map((sec, idx) => {
               const maxCost = metrics.topSectors[0]?.cost || 1;
               const barWidth = Math.round((sec.cost / maxCost) * 100);
               return (
-                <div key={sec.name} className="space-y-1 font-mono text-xs">
+                <div key={sec.name} className="group/sector space-y-1 font-mono text-xs rounded-md -mx-1.5 px-1.5 py-0.5 transition-colors hover:bg-cyan-500/5">
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-200 font-medium truncate max-w-[200px] sm:max-w-xs">
+                    <span className="text-slate-200 font-medium truncate max-w-[200px] sm:max-w-xs transition-colors group-hover/sector:text-cyan-300">
                       {idx + 1}. {sec.name}
                     </span>
                     <div className="flex items-center gap-3 shrink-0">
@@ -307,14 +451,15 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                   </div>
                   <div className="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-cyan-500 rounded-full"
-                      style={{ width: `${barWidth}%` }}
+                      className="h-full rounded-full bg-gradient-to-r from-cyan-500 via-sky-400 to-indigo-400"
+                      style={{ width: `${barWidth}%`, animationDelay: `${0.3 + idx * 0.1}s` }}
                     />
                   </div>
                 </div>
               );
             })}
           </div>
+          )}
         </div>
 
         {/* Panel B: Execution Status & Milestone Health */}
@@ -337,29 +482,29 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
 
           {/* 3 Executive Health Metrics */}
           <div className="grid grid-cols-3 gap-2.5 pt-0.5 text-center font-mono">
-            <div className="p-2.5 rounded-lg bg-[#10141D] border border-slate-800">
+            <TiltCard max={16} className="relative group p-2.5 rounded-lg bg-[#10141D] border border-slate-800 transition-colors duration-300 hover:border-cyan-500/40 hover:shadow-[0_12px_28px_-12px_rgba(34,211,238,0.55)]">
               <div className="text-[10px] text-slate-400 uppercase font-medium">Avg Progress</div>
               <div className="text-lg sm:text-xl font-extrabold text-cyan-400 mt-0.5">
-                {metrics.avgProgress}%
+                <AnimatedNumber value={Number(metrics.avgProgress)} decimals={1} suffix="%" />
               </div>
               <div className="text-[9.5px] text-slate-400 mt-0.5">Physical Completion</div>
-            </div>
+            </TiltCard>
 
-            <div className="p-2.5 rounded-lg bg-[#10141D] border border-slate-800">
+            <TiltCard max={16} className="relative group p-2.5 rounded-lg bg-[#10141D] border border-slate-800 transition-colors duration-300 hover:border-cyan-500/40 hover:shadow-[0_12px_28px_-12px_rgba(34,211,238,0.55)]">
               <div className="text-[10px] text-slate-400 uppercase font-medium">Slippage Rate</div>
               <div className="text-lg sm:text-xl font-extrabold text-amber-400 mt-0.5">
-                {metrics.delayedPct}%
+                <AnimatedNumber value={Number(metrics.delayedPct)} decimals={1} suffix="%" />
               </div>
               <div className="text-[9.5px] text-slate-400 mt-0.5">Over Time Horizon</div>
-            </div>
+            </TiltCard>
 
-            <div className="p-2.5 rounded-lg bg-[#10141D] border border-slate-800">
+            <TiltCard max={16} className="relative group p-2.5 rounded-lg bg-[#10141D] border border-slate-800 transition-colors duration-300 hover:border-cyan-500/40 hover:shadow-[0_12px_28px_-12px_rgba(34,211,238,0.55)]">
               <div className="text-[10px] text-slate-400 uppercase font-medium">Drawdown</div>
               <div className="text-lg sm:text-xl font-extrabold text-emerald-400 mt-0.5">
-                {metrics.drawdownPct}%
+                <AnimatedNumber value={Number(metrics.drawdownPct)} decimals={1} suffix="%" />
               </div>
               <div className="text-[9.5px] text-slate-400 mt-0.5">Expenditure Ratio</div>
-            </div>
+            </TiltCard>
           </div>
 
           {/* Status Breakdown Segment */}
@@ -453,7 +598,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                     </div>
                     <div className="w-20 h-1.5 bg-slate-800 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-cyan-500 rounded-full"
+                        className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-indigo-400"
                         style={{ width: `${Math.min(100, proj.physicalProgress)}%` }}
                       />
                     </div>

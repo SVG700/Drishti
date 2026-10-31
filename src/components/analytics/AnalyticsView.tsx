@@ -133,7 +133,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-base sm:text-lg font-bold text-slate-100 uppercase tracking-tight">
-              DRISHTI • Predictive Analytics & Insights
+              <span className="text-gradient-drishti">DRISHTI</span> • Predictive Analytics & Insights
             </h1>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-800/80 font-semibold">
               MoSPI PAIMANA Engine

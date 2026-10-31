@@ -105,11 +105,11 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
   return (
     <div className="space-y-4 max-w-7xl mx-auto pb-10 font-sans">
       {/* HEADER BAR */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-[#0C1017] p-3.5 sm:p-4 rounded-xl border border-slate-800/80 shadow-sm">
+      <div className="gradient-border flex flex-col md:flex-row md:items-center justify-between gap-3 bg-[#0C1017] p-3.5 sm:p-4 rounded-xl border border-slate-800/80 shadow-sm">
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-sm sm:text-base font-bold text-slate-100 uppercase tracking-tight">
-              DRISHTI • PROJECTS EXPLORER
+              <span className="text-gradient-drishti">DRISHTI</span> • PROJECTS EXPLORER
             </h1>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800/60 font-semibold">
               {filteredProjects.length.toLocaleString()} of {projects.length.toLocaleString()} Projects
