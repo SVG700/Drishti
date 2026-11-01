@@ -22,6 +22,7 @@ import type { InfrastructureProject } from '../../types/project';
 import { useTheme } from '../../context/ThemeContext';
 import { AnimatedBackdrop } from '../motion/AnimatedBackdrop';
 import { useSpotlight } from '../motion/useSpotlight';
+import apiService from '../../services/apiService';
 
 const SPRING = { type: 'spring', stiffness: 420, damping: 34 } as const;
 
@@ -460,7 +461,7 @@ export const AppShell: React.FC<AppShellProps> = ({
               onClick={onRefreshBackendStatus}
               title={
                 isBackendOnline
-                  ? 'FastAPI AI Backend is online at http://127.0.0.1:8000'
+                  ? `FastAPI AI Backend is online at ${apiService.getBaseUrl()}`
                   : 'FastAPI Backend offline (uvicorn app.main:app)'
               }
               className={`px-2 py-1 rounded text-[10px] font-mono font-medium border flex items-center gap-1.5 transition-colors cursor-pointer ${

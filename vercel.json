@@ -4,7 +4,20 @@
   "installCommand": "npm ci",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "functions": {
+    "api/index.py": {
+      "maxDuration": 60,
+      "excludeFiles": "{AI-Backend.zip,drishti_final_demo.mp4,paimana_*.csv,brag-output/**,capture-test/**,data/**,dist/**,node_modules/**,public/**,scratch/**,src/**,tests/**,AI-Backend/tests/**,AI-Backend/.venv/**,AI-Backend/AI-Backend/**}"
+    }
+  },
   "rewrites": [
+    { "source": "/health", "destination": "/api/index" },
+    { "source": "/projects", "destination": "/api/index" },
+    { "source": "/projects/:path*", "destination": "/api/index" },
+    { "source": "/analytics/:path*", "destination": "/api/index" },
+    { "source": "/ai/:path*", "destination": "/api/index" },
+    { "source": "/docs", "destination": "/api/index" },
+    { "source": "/openapi.json", "destination": "/api/index" },
     {
       "source": "/api/nominatim/:path*",
       "destination": "https://nominatim.openstreetmap.org/:path*"

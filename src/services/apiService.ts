@@ -23,11 +23,15 @@ import type {
 } from '../types/backend';
 
 // Determine default API base URL
-// In development with Vite proxy, relative requests or direct 127.0.0.1:8000 work.
+// Development talks to uvicorn on 127.0.0.1:8000. A production build calls the
+// same origin: on Vercel the backend is served by api/index.py on the site's own
+// domain (and `vite preview` proxies these paths to :8000).
 const ENV_API_BASE = import.meta.env.VITE_API_BASE_URL;
 export const API_BASE_URL = (ENV_API_BASE && ENV_API_BASE.trim() !== '')
   ? ENV_API_BASE.replace(/\/+$/, '')
-  : 'http://127.0.0.1:8000';
+  : import.meta.env.DEV
+    ? 'http://127.0.0.1:8000'
+    : '';
 
 class ApiService {
   private baseUrl: string;
@@ -41,7 +45,7 @@ class ApiService {
   }
 
   public getBaseUrl(): string {
-    return this.baseUrl;
+    return this.baseUrl || window.location.origin;
   }
 
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
@@ -54,7 +58,9 @@ class ApiService {
 
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 20000); // 20s timeout
+      // Longer than the backend's 30s Gemini timeout plus a serverless cold start,
+      // so the backend's own fallback answer can still arrive.
+      const timeoutId = setTimeout(() => controller.abort(), 45000);
 
       const response = await fetch(url, {
         ...options,

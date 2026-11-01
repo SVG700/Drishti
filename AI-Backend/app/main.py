@@ -27,12 +27,14 @@ logger = logging.getLogger("drishti_backend")
 async def lifespan(app: FastAPI):
     """Lifespan context manager for startup and shutdown procedures."""
     logger.info("Starting DRISHTI (दृष्टि) • MoSPI PAIMANA AI Backend...")
-    success, msg = data_loader.load_and_validate()
-    if success:
-        logger.info("PAIMANA dataset initialized: %s", msg)
-    else:
-        logger.warning("PAIMANA dataset warning: %s", msg)
-    log_gemini_configuration()
+    # The Vercel entry (api/index.py) may already have loaded the dataset.
+    if not data_loader.is_loaded:
+        success, msg = data_loader.load_and_validate()
+        if success:
+            logger.info("PAIMANA dataset initialized: %s", msg)
+        else:
+            logger.warning("PAIMANA dataset warning: %s", msg)
+        log_gemini_configuration()
     yield
     logger.info("Shutting down DRISHTI AI Backend.")
 

@@ -1,0 +1,7 @@
+# Runtime dependencies for the Vercel Python function (api/index.py).
+# Local development and tests use AI-Backend/requirements.txt.
+fastapi>=0.110.0
+pydantic>=2.6.0
+pandas>=2.2.0
+python-dotenv>=1.0.0
+google-genai>=2.0.0
