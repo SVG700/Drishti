@@ -1,0 +1,21 @@
+# Render Blueprint for the DRISHTI AI backend (FastAPI + Gemini).
+# In Render: New -> Blueprint -> pick this repository. See DEPLOYMENT.md.
+services:
+  - type: web
+    name: drishti-ai-backend
+    runtime: python
+    rootDir: AI-Backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      # Entered in the Render dashboard on first deploy; never committed.
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-3.5-flash
+      - key: GEMINI_TIMEOUT_SECONDS
+        value: "30"
+      - key: ENVIRONMENT
+        value: production
